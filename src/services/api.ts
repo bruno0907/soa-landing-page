@@ -1,11 +1,11 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: process.env.REACT_APP_HOST
+  baseURL: 'https://soa-apply-backend.herokuapp.com'
 })
 
 const rioApi = axios.create({
-  baseURL : process.env.REACT_APP_RIO
+  baseURL : 'https://raider.io/api/v1/characters/profile'
 })
 
 interface ApplyProps{
