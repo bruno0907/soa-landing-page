@@ -1,22 +1,22 @@
 import axios from 'axios'
 
-const enviroment = process.env.REACT_APP_ENVIROMENT
-const production = process.env.REACT_APP_PRODUCTION
-const development = process.env.REACT_APP_DEVELOPMENT
+// const environment = process.env.REACT_APP_ENVIRONMENT
+// const production = process.env.REACT_APP_PRODUCTION
+// const development = process.env.REACT_APP_DEVELOPMENT
 
-const RIO = process.env.REACT_APP_RIO
+// const RIO = process.env.REACT_APP_RIO
 
-const URI = enviroment === 'development' ? development : production
+// const URI = environment === 'development' ? development : production
 
-console.log(URI)
-console.log(RIO)
+// console.log(URI)
+// console.log(RIO)
 
 const api = axios.create({
-  baseURL: URI
+  baseURL: 'https://soa-apply-backend.herokuapp.com'
 })
 
 const rioApi = axios.create({
-  baseURL : RIO
+  baseURL : 'https://raider.io/api/v1/characters/profile'
 })
 
 interface ApplyProps{
