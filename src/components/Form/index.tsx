@@ -34,15 +34,16 @@ export default function ApplyForm(){
   const [loading, setLoading] = useState(false)  
 
   useEffect(() => {    
+    setLoading(true)
     api.getClasses()
       .then(response => {
         if(!response) throw new Error('No response from the server.')
-
         const { classes } = response.data
 
         if(!classes) throw new Error('Error fetching classes')
                    
-        return setClassesList(classes)
+        setClassesList(classes)
+        setLoading(false)
       })
       .catch(error => console.error(error.message))
   }, [])
