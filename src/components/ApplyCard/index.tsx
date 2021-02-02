@@ -16,16 +16,6 @@ interface ApplyProps{
   }
 }
 
-/*
-<button>
-  <a href={`https://worldofwarcraft.com/en-us/character/us/azralon/${applicant.charName}`} target="_blank" rel="noopener noreferrer">Link do armory</a>
-</button>
-<button>
-  <a href={`https://raider.io/characters/us/azralon/${applicant.charName}`} target="_blank" rel="noopener noreferrer">Link do Raider.io</a>
-</button>   
-
-*/
-
 const ApplyCard: React.FC<ApplyProps> = ({ applicant }) => {
   const [rioInfo, setRioInfo] = useState<any>()
   const [ilvl, setIlvl] = useState<any>()
@@ -37,8 +27,7 @@ const ApplyCard: React.FC<ApplyProps> = ({ applicant }) => {
 
   useEffect(() => {
     api.rioInfoFetch(applicant.charName) 
-    .then(({ data }) => {      
-      // console.log(data.raid_progression["castle-nathria"].mythic_bosses_killed)
+    .then(({ data }) => {            
       setRioInfo(data)
       setIlvl(data.gear.item_level_equipped)      
       setProgression({
@@ -49,7 +38,7 @@ const ApplyCard: React.FC<ApplyProps> = ({ applicant }) => {
     })
     .catch(error => console.log(error))
 
-  }, [])
+  }, [applicant.charName])
 
   return (            
     <Container>
