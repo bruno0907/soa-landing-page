@@ -150,3 +150,10 @@ export const FormButton = styled.button`
     pointer-events: none;
   `}
 `
+
+export const ErrorBox = styled.span`
+  color: var(--color-button-secondary);
+  font-size: .9rem;
+  margin: 8px 0;
+  text-align: center;
+`

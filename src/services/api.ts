@@ -1,18 +1,7 @@
 import axios from 'axios'
 
-// const environment = process.env.REACT_APP_ENVIRONMENT
-// const production = process.env.REACT_APP_PRODUCTION
-// const development = process.env.REACT_APP_DEVELOPMENT
-
-// const RIO = process.env.REACT_APP_RIO
-
-// const URI = environment === 'development' ? development : production
-
-// console.log(URI)
-// console.log(RIO)
-
 const api = axios.create({
-  baseURL: 'https://soa-apply-backend.herokuapp.com'
+  baseURL: 'https://soa-apply-backend.herokuapp.com'  
 })
 
 const rioApi = axios.create({
@@ -26,6 +15,11 @@ interface ApplyProps{
   mainSpec: string;
   offSpec: string;
   about: string;
+}
+
+interface AdminAuthProps{
+  username: string;
+  password: string;
 }
 
 class Api{
@@ -45,6 +39,10 @@ class Api{
     const defaultParams = '?region=us&realm=azralon&name='
     const extraInfoParams = '&fields=raid_progression%2Cmythic_plus_scores_by_season%3Acurrent%2Cgear'
     return await rioApi.get(`${defaultParams}${name}&${extraInfoParams}`)
+  }
+
+  async adminAuth(data: AdminAuthProps){
+    return await api.post('/admin/sign-in', data)
   }
 }
 
