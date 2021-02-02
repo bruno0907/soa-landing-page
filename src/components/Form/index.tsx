@@ -84,12 +84,12 @@ export default function ApplyForm(){
     }
 
     try {
-      const response = await api.newApply(data)    
+      const response = await api.newApply(data)          
       if(!response){
         throw new Error('Um erro ocorreu ao concluir seu apply.')
       }
       setApplyStatus('SUCCESS')
-      setLoading(false)
+      setLoading(false)      
       return  
 
     } catch (error) {
@@ -130,10 +130,7 @@ export default function ApplyForm(){
               >
                 <option hidden />                
                 { classesList.map(gameClass => 
-                  <option 
-                    key={gameClass._id} 
-                    value={gameClass.className}>{gameClass.className}                    
-                </option>
+                  <option key={gameClass._id} value={gameClass.className}>{gameClass.className}</option>
                 )}   
               </Select>
               { className.length <= 0 ?
@@ -147,10 +144,7 @@ export default function ApplyForm(){
               >
                 <option hidden />
                 { classSpecs.map((spec: any) => 
-                  <option 
-                    key={spec} 
-                    value={spec}>{spec}                    
-                  </option>
+                  <option key={spec} value={spec}>{spec}</option>
                 )}
               </Select>        
               <Select 
@@ -161,10 +155,7 @@ export default function ApplyForm(){
               >
                 <option hidden />
                 { classSpecs.map((spec: any) => 
-                  <option 
-                    key={spec} 
-                    value={spec}>{spec}                    
-                  </option>
+                  <option key={spec} value={spec}>{spec}</option>
                 )}
               </Select> 
               </>

@@ -1,11 +1,22 @@
 import axios from 'axios'
 
+const enviroment = process.env.REACT_APP_ENVIROMENT
+const production = process.env.REACT_APP_PRODUCTION
+const development = process.env.REACT_APP_DEVELOPMENT
+
+const RIO = process.env.REACT_APP_RIO
+
+const URI = enviroment === 'development' ? development : production
+
+console.log(URI)
+console.log(RIO)
+
 const api = axios.create({
-  baseURL: 'https://soa-apply-backend.herokuapp.com'
+  baseURL: URI
 })
 
 const rioApi = axios.create({
-  baseURL : 'https://raider.io/api/v1/characters/profile'
+  baseURL : RIO
 })
 
 interface ApplyProps{
@@ -19,7 +30,7 @@ interface ApplyProps{
 
 class Api{
   async getApplies(){
-    return await api.get('/')
+    return await api.get('/applies')
   }
 
   async getClasses(){
@@ -27,11 +38,13 @@ class Api{
   }
 
   async newApply(data: ApplyProps){
-    return await api.post('/', data)
+    return await api.post('/applies', data)
   }
 
   async rioInfoFetch(name: string){
-    return await rioApi.get(`?region=us&realm=azralon&name=${name}`)
+    const defaultParams = '?region=us&realm=azralon&name='
+    const extraInfoParams = '&fields=raid_progression%2Cmythic_plus_scores_by_season%3Acurrent%2Cgear'
+    return await rioApi.get(`${defaultParams}${name}&${extraInfoParams}`)
   }
 }
 

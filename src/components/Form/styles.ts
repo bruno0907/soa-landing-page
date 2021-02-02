@@ -1,8 +1,8 @@
 import styled, { css } from "styled-components";
 
 export const Container = styled.div`    
-  width: 530px;
-  min-width: 450px;
+  width: 100%;
+  max-width: 560px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -69,7 +69,7 @@ export const FormButton = styled.button`
       filter: opacity(.9);
     }
 
-  ${({ disabled }) => disabled === true && css`
+  ${({ disabled }) => disabled && css`
     opacity: .5;
     background: grey;   
     pointer-events: none;

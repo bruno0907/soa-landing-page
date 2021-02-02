@@ -3,12 +3,12 @@ import styled from 'styled-components';
 export const Container = styled.div`
   width: 100%; 
   position: relative;
+`
+export const TextareaLabel = styled.label`
+  color: var(--color-text-secondary);    
+`
 
-  label{
-    color: var(--color-text-secondary);    
-  }
-
-  textarea{
+export const TextareaField = styled.textarea`
     width: 100%;    
     height: 120px;
     resize: vertical;

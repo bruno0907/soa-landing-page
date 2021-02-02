@@ -10,12 +10,12 @@ export const Container = styled.li`
 `
 
 export const Card = styled.article<ApplyStatus>`
-  width: 220px;
-  border-radius: 4px;
+  width: 285px;
+  border-radius: 8px;
   padding: 12px;
   background-color: var(--color-box-background);
   color: var(--color-text-primary); 
-  border-left: solid 3px;
+  border-left: solid 5px;
 
   ${({ applyStatus }) => applyStatus === 'pending' && css`
     border-color: blue;
@@ -30,9 +30,13 @@ export const Card = styled.article<ApplyStatus>`
 
 export const CardHeader = styled.div`
   display: flex;
-  
+  align-items: center;
+  justify-content: flex-start;
+
     img{
+      height: 65px;
       border-radius: 50%;
+      margin: 0 12px 12px 0;
     }
 
   div{
