@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const URI = window.location.href === 'http://localhost:3000/' 
 ? 'http://localhost:3333'
-: String(process.env.REACT_APP_PRODUCTION)
+: String(process.env.PRODUCTION)
 
 console.log(URI)
 
