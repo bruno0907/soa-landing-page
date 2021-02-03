@@ -1,7 +1,13 @@
 import axios from 'axios'
 
+const URI = window.location.href === 'http://localhost:3000/' 
+? 'http://localhost:3333'
+: String(process.env.REACT_APP_PRODUCTION)
+
+console.log(URI)
+
 const api = axios.create({
-  baseURL: 'https://soa-apply-backend.herokuapp.com'  
+  baseURL: URI
 })
 
 const rioApi = axios.create({
