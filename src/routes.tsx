@@ -4,6 +4,7 @@ import Dashboard from './pages/Dashboard'
 import SignIn from './pages/SignIn';
 import PasswordForgot from './pages/PasswordForgot';
 import NewPassword from './pages/NewPassword';
+import Apply from './pages/Apply/Apply';
 
 const Routes = () => {
   return (
@@ -14,6 +15,7 @@ const Routes = () => {
         <Route path="/sign-in" component={SignIn}  />
         <Route path="/forgot-password" component={PasswordForgot}  />
         <Route path="/new-password" component={NewPassword}  />
+        <Route path="/apply/:id" component={Apply}  />
       </Switch>
     </Router>   
   );

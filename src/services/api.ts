@@ -31,6 +31,10 @@ class Api{
     return await api.get('/applies')
   }
 
+  async getApply(id: string){
+    return await api.get(`/apply/${id}`)
+  }
+
   async getClasses(){
     return await api.get('/classes')
   }
@@ -47,6 +51,16 @@ class Api{
 
   async adminAuth(data: AdminAuthProps){
     return await api.post('/admin/sign-in', data)
+  }
+
+  async applyStatusHandle(id: string, status: string){
+    return await api.post(`/apply/${id}`, {
+      approvalStatus: status
+    })
+  }
+
+  async applyRemove(id: string){
+    return await api.delete(`/apply/${id}`)
   }
 }
 

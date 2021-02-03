@@ -44,19 +44,16 @@ const ApplyCard: React.FC<ApplyProps> = ({ applicant }) => {
     <Container>
       <Card applyStatus={applicant.approvalStatus}>
         <CardHeader>          
-          { rioInfo !== undefined ? 
-            <img src={`${rioInfo.thumbnail_url}`} alt=""/>                                                                                         
-            : null
-          }        
+          { rioInfo && <img src={`${rioInfo.thumbnail_url || ''} `} alt={`${rioInfo.thumbnail_url || ''}`}/> }        
           <div>
             <h3>{applicant.charName}</h3>
             <p>{applicant.battleTag}</p>
           </div>          
         </CardHeader>
         <CardBody>          
-          <p>{`${applicant.mainSpec} ${applicant.className}`} - <span>{`${ilvl}ilvl`}</span></p> 
-          <p>{`Raider.io: ${io}`}</p>
-          <p>{`Progressão: ${progression.Heroic}/10H - ${progression.Mythic}/10M`}</p>
+          <p>{`${applicant.mainSpec} ${applicant.className}`} - <span>{`${ilvl || ''}ilvl`}</span></p> 
+          <p>{`Raider.io: ${io || ''}`}</p>
+          <p>{`Progressão: ${progression.Heroic || ''}/10H - ${progression.Mythic || ''}/10M`}</p>
         </CardBody>      
       </Card>      
     </Container>

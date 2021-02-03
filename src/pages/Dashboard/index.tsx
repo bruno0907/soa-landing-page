@@ -90,7 +90,7 @@ const Dashboard: React.FC = () => {
               <ApplyList>                
                 <ul>
                   { applicants?.map((applicant: ApplyProps) => 
-                    <Link to="/" key={applicant._id}>
+                    <Link to={`/apply/${applicant._id}`} key={applicant._id}>
                       <ApplyCard applicant={applicant}/>              
                     </Link>
                   )}

@@ -11,6 +11,7 @@ const GlobalStyle = createGlobalStyle`
     --color-text-primary: #e1e1e6;
     --color-text-secondary: #757575;
     --color-box-background: #202024;
+    --color-approved: #00ff04;
   }
 
   *{

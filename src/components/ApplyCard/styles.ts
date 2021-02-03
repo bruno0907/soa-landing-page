@@ -18,13 +18,13 @@ export const Card = styled.article<ApplyStatus>`
   border-left: solid 5px;
 
   ${({ applyStatus }) => applyStatus === 'pending' && css`
-    border-color: blue;
+    border-color: var(--color-primary);
   `}
   ${({ applyStatus }) => applyStatus === 'approved' && css`
-    border-color: green;
+    border-color: var(--color-approved);
   `}
   ${({ applyStatus }) => applyStatus === 'rejected' && css`
-    border-color: red;
+    border-color: var(--color-button-secondary);
   `}
 `
 
