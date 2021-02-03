@@ -2,9 +2,7 @@ import axios from 'axios'
 
 const URI = window.location.href === 'http://localhost:3000/' 
 ? 'http://localhost:3333'
-: String(process.env.PRODUCTION)
-
-console.log(URI)
+: 'https://soa-apply-backend.herokuapp.com'
 
 const api = axios.create({
   baseURL: URI
