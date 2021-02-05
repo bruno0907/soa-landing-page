@@ -59,9 +59,9 @@ export const Container = styled.div<SelectProps>`
 
   ul{
     position: absolute;
-    width: 60%;
+    width: 170px;
     top: 90px;
-    left: 15px;
+    left: 5px;
     z-index: 1;
     list-style: none;
     background: var(--color-background);
