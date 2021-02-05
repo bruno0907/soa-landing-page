@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, ChangeEvent, FormEvent } from 'react'
+import { useState, useEffect, useCallback, FormEvent } from 'react'
 
 import { GoCheck, GoX, GoAlert } from 'react-icons/go'
 
@@ -22,7 +22,7 @@ interface ClassesProps{
   specializations: Array<[]>    
 }
 
-export default function ApplyForm(){
+export default function ApplyForm(){    
   const [battleTag, setBattleTag] = useState('')
   const [charName, setCharName] = useState('')
   const [className, setClassName] = useState('')
@@ -55,7 +55,6 @@ export default function ApplyForm(){
       })
 
   }, [])
-
   
   const fetchClassSpecs = useCallback((classChosen) => {       
     const selectedClass = classesList.filter(option => option.className === classChosen)
@@ -63,16 +62,16 @@ export default function ApplyForm(){
     
   }, [classesList])
   
-  const handleClassChange = (event: ChangeEvent<HTMLSelectElement>): void => {   
+  const handleClassChange = (value: string) => {         
     setClassName('')
     setMainSpec('')
     setOffSpec('')
-    setClassName(event.target.value)              
-    fetchClassSpecs(event.target.value)     
+    setClassName(value)       
+    fetchClassSpecs(value)         
   }
   
   const validateSubmit = !Boolean(
-    battleTag.length > 0 && 
+    battleTag.length > 0 &&
     charName.length > 0 && 
     className.length > 0 && 
     mainSpec.length > 0
@@ -92,7 +91,7 @@ export default function ApplyForm(){
       about
     }
 
-    try {
+    try {      
       const response = await api.newApply(data)          
       if(!response){
         throw new Error('Um erro ocorreu ao concluir seu apply.')
@@ -135,12 +134,14 @@ export default function ApplyForm(){
                 <Select 
                   label="Classe"
                   name="class"
-                  value={className}
-                  onChange={event => handleClassChange(event)}
-                >
-                  <option hidden />                
+                  value={className}                  
+                >                  
                   { classesList.map(gameClass => 
-                    <option key={gameClass._id} value={gameClass.className}>{gameClass.className}</option>
+                    <li 
+                      key={gameClass._id} 
+                      onClick={() => handleClassChange(gameClass.className)}
+                      >{gameClass.className}
+                    </li>
                   )}   
                 </Select>
                 { className.length <= 0 ? null :      
@@ -149,10 +150,9 @@ export default function ApplyForm(){
                     name="mainSpec"
                     value={mainSpec}
                     onChange={event => setMainSpec(event.target.value)}                                
-                  >
-                    <option hidden />
+                  >                    
                     { classSpecs.map((spec: any) => 
-                      <option key={spec} value={spec}>{spec}</option>
+                      <li key={spec} onClick={() => setMainSpec(spec)}>{spec}</li>
                     )}
                   </Select>  
                 }
@@ -162,10 +162,9 @@ export default function ApplyForm(){
                   name="offSpec"
                   value={offSpec}
                   onChange={event => setOffSpec(event.target.value)}                                  
-                >
-                  <option hidden />
+                >                  
                   { classSpecs.map((spec: any) => 
-                    <option key={spec} value={spec}>{spec}</option>
+                    <li key={spec} onClick={() => setOffSpec(spec)}>{spec}</li>
                   )}
                 </Select> 
                 }

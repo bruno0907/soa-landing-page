@@ -7,11 +7,11 @@ const Footer = () => {
   
   return (    
     <Container>
-      <span>Made by</span> - 
       <a href="https://github.com/bruno0907" target="_blank" rel="noopener noreferrer">
+        <span>Made by</span> 
         <DiGithubBadge size={24} />
+        <span>{currentYear}</span>      
       </a>
-      <span> - {currentYear}</span>      
     </Container>    
   )
 }
