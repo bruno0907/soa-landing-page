@@ -1,8 +1,10 @@
 import axios from 'axios'
 
-const URI = window.location.href === 'http://localhost:3000/' 
+const URI = window.location.hostname === 'localhost' 
 ? 'http://localhost:3333'
 : 'https://soa-apply-backend.herokuapp.com'
+
+console.log(URI)
 
 const api = axios.create({
   baseURL: URI
@@ -11,7 +13,6 @@ const api = axios.create({
 const rioApi = axios.create({
   baseURL : 'https://raider.io/api/v1/characters/profile'
 })
-
 interface ApplyProps{
   battleTag: string;
   charName: string;
@@ -43,7 +44,7 @@ class Api{
     return await api.post('/applies', data)
   }
 
-  async rioInfoFetch(name: string){
+  async getRaiderioInfo(name: string){
     const defaultParams = '?region=us&realm=azralon&name='
     const extraInfoParams = '&fields=raid_progression%2Cmythic_plus_scores_by_season%3Acurrent%2Cgear'
     return await rioApi.get(`${defaultParams}${name}&${extraInfoParams}`)
@@ -62,6 +63,7 @@ class Api{
   async applyRemove(id: string){
     return await api.delete(`/apply/${id}`)
   }
+  
 }
 
 export default new Api()

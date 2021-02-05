@@ -1,23 +1,24 @@
 import styled, { css } from "styled-components";
 
-export const Container = styled.div`    
-  width: 100%;
-  max-width: 560px;
+export const Container = styled.div`        
+  width: 565px;
+  min-height: 570px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;    
-  margin-left: 24px;
+  margin-left: 24px;  
 
-  @media(max-width: 1020px){
+  @media(max-width: 1020px){    
     width: 100%;
     margin-left: 0;
-    margin-top: 24px;
+    margin-top: 48px;
   }
 `
 
 export const Form = styled.form`
-  width: 100%;  
+  width: 100%;
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -32,6 +33,7 @@ export const Form = styled.form`
     color: var(--color-text-primary);
   }
 ` 
+
 export const FormSection = styled.div`
   width: 100%;
   display: flex;
@@ -75,49 +77,29 @@ export const FormButton = styled.button`
     pointer-events: none;
   `}
 `
-export const FormSuccess = styled.div`  
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
 
-  h1{    
-    color: var(--color-primary);
-    text-align: center;
-  }
-  p{    
-    color: var(--color-text-secondary);
-    text-align: center;
-    margin-top: 12px;
-  }
-  svg{
-    fill: var(--color-primary);
-    
-  }
-` 
-export const FormError = styled.div`
+export const FormFallback = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 
-  h1{    
+  h3{    
     color: var(--color-primary);
-    text-align: center;
+    text-align: center;    
+    font-size: 1.5rem;
+    margin: 24px 0;
   }
 
   a{    
     color: var(--color-text-secondary);
     text-align: center;
-    margin-top: 12px;
+    
     transition: filter .1s;
 
     &:hover{
       filter: brightness(150%);
-    }
+    }    
   }
-  svg{
-    fill: #822121;
-    
-  }
+
 ` 

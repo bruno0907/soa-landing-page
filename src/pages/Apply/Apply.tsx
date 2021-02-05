@@ -39,13 +39,16 @@ const Apply: React.FC<ApplyProps> = () => {
   const history = useHistory()
   const [applyInfo, setApplyInfo] = useState<ApplyProps>()
   const [playerInfo, setPlayerInfo] = useState<any>()
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     setLoading(true)
     const getApplyData = (async() => {
       const response = await api.getApply(id)
-      if(!response) return
+      if(!response){
+        setLoading(false)
+        return
+      }
 
       const { data } = response     
       const { apply } = data
@@ -57,12 +60,14 @@ const Apply: React.FC<ApplyProps> = () => {
     const playerName = applyInfo?.charName
   
     const getRaiderIoInfo = async(playerName: string) => {      
-      const response = await api.rioInfoFetch(playerName)      
-      if(!response) return
+      const response = await api.getRaiderioInfo(playerName)      
+      if(!response){
+        setLoading(false)
+        return
+      }      
   
-      const { data } = response
-  
-      console.log(data)
+      const { data } = response  
+      
       setPlayerInfo(data)
     }    
     
@@ -86,39 +91,39 @@ const Apply: React.FC<ApplyProps> = () => {
       .catch(error => console.log(error.message))
   }
 
-  return (
+  return (    
     <Container>      
-      { !playerInfo || !applyInfo || loading === true
+      { loading === true
         ? <PageLoader />
         : <>            
-            <Header status={applyInfo.approvalStatus || ''}>
+            <Header status={applyInfo?.approvalStatus || ''}>
               <Link to="/dashboard">
                 <button><FiArrowLeft size={24} /></button>
               </Link>
-              <h1>Apply {applyInfo.charName}</h1>
+              <h1>Apply {applyInfo?.charName}</h1>
               <span> 
-                {applyInfo.approvalStatus === 'pending' && 'Pendente'}
-                {applyInfo.approvalStatus === 'approved' && 'Aprovado'}
-                {applyInfo.approvalStatus === 'rejected' && 'Recusado'}
+                {applyInfo?.approvalStatus === 'pending' && 'Pendente'}
+                {applyInfo?.approvalStatus === 'approved' && 'Aprovado'}
+                {applyInfo?.approvalStatus === 'rejected' && 'Recusado'}
               </span>              
             </Header>
             <ApplyContent>
               
-              <ApplyHeader>
-                <img src={playerInfo.thumbnail_url} alt={`${playerInfo?.race}_${playerInfo?.class}`}/>
+              <ApplyHeader playerClass={applyInfo?.className}>
+                <img src={playerInfo?.thumbnail_url} alt=""/>
                 
-                <ApplyInfo>
-                  <h2>{applyInfo.charName}</h2>
-                  <span>{applyInfo.battleTag}</span>  
+                <ApplyInfo playerClass={applyInfo?.className}>
+                  <h2>{applyInfo?.charName}</h2>
+                  <span>{applyInfo?.battleTag}</span>  
                   <p>{`
-                    ${applyInfo.mainSpec} ${applyInfo.offSpec !== '' && ` / ${applyInfo.offSpec}`} ${applyInfo.className} -
-                    ${playerInfo.gear.item_level_equipped} ilvl
+                    ${applyInfo?.mainSpec} ${applyInfo?.offSpec !== '' && ` / ${applyInfo?.offSpec}`} ${applyInfo?.className} -
+                    ${playerInfo?.gear.item_level_equipped} ilvl
                     `}
                   </p>              
                 </ApplyInfo>
-                <ScoreIoBox io={playerInfo.mythic_plus_scores_by_season[0].scores.all}>
+                <ScoreIoBox io={playerInfo?.mythic_plus_scores_by_season[0].scores.all}>
                   <span>Best Mythic+</span>
-                  <p>{playerInfo.mythic_plus_scores_by_season[0].scores.all}</p>                  
+                  <p>{playerInfo?.mythic_plus_scores_by_season[0].scores.all}</p>                  
                 </ScoreIoBox>                
               </ApplyHeader>
               
@@ -127,26 +132,26 @@ const Apply: React.FC<ApplyProps> = () => {
                   <h3>Progressão Castle Nathria</h3>
                   <div>
                     <ProgressionBox>                    
-                      {playerInfo.raid_progression["castle-nathria"].mythic_bosses_killed}/10M                 
+                      {playerInfo?.raid_progression["castle-nathria"].mythic_bosses_killed}/10M                 
                     </ProgressionBox>
                     <ProgressionBox>
-                      {playerInfo.raid_progression["castle-nathria"].heroic_bosses_killed}/10H
+                      {playerInfo?.raid_progression["castle-nathria"].heroic_bosses_killed}/10H
                     </ProgressionBox>
                   </div>                  
                 </ProgressionSection>
                 
                 <PlayerAbout>
                   <h3>Informações adicionais</h3>
-                  <p>{applyInfo.about}</p>
+                  <p>{applyInfo?.about}</p>
                 </PlayerAbout>
                 
                 <LinksSection>
                   <h3>Links</h3>
                   <div>
-                    <a href={`https://www.warcraftlogs.com/character/us/azralon/${applyInfo.charName}`} target="_blank" rel="noopener noreferrer">Logs</a>
-                    <a href={`http://worldofwarcraft.com/en-us/character/us/azralon/${applyInfo.charName}`} target="_blank" rel="noopener noreferrer">Armory</a>
-                    <a href={`http://www.wowprogress.com/character/us/azralon/${applyInfo.charName}`} target="_blank" rel="noopener noreferrer">Wowprogress</a>
-                    <a href={`https://raider.io/characters/us/azralon/${applyInfo.charName}`} target="_blank" rel="noopener noreferrer">Raider.io</a> 
+                    <a href={`https://www.warcraftlogs.com/character/us/azralon/${applyInfo?.charName}`} target="_blank" rel="noopener noreferrer">Logs</a>
+                    <a href={`http://worldofwarcraft.com/en-us/character/us/azralon/${applyInfo?.charName}`} target="_blank" rel="noopener noreferrer">Armory</a>
+                    <a href={`http://www.wowprogress.com/character/us/azralon/${applyInfo?.charName}`} target="_blank" rel="noopener noreferrer">Wowprogress</a>
+                    <a href={`https://raider.io/characters/us/azralon/${applyInfo?.charName}`} target="_blank" rel="noopener noreferrer">Raider.io</a> 
                   </div>
                 </LinksSection>
 
@@ -164,9 +169,10 @@ const Apply: React.FC<ApplyProps> = () => {
 
             </ApplyContent>
             <DeleteApplyButton onClick={handleRemoveApply}>Excluir Apply</DeleteApplyButton>
-        </>
-      }
+          </>
+        }
     </Container>
+    
   );
 }
 

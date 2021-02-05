@@ -28,7 +28,7 @@ const GlobalStyle = createGlobalStyle`
 
   #root{
     max-width: 100vw;
-    min-height: 100vh;   
+    height: 100vh;   
     display: flex;
     flex-direction: column;
     align-items: center;    

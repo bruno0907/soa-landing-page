@@ -1,11 +1,20 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
-import { Container, Card, CardHeader, CardBody } from './styles'
+import { 
+  Container, 
+  Card, 
+  CardHeader,  
+  CardBody 
+} from './styles'
+
+import avatar_placeholder from '../../assets/images/avatar_placeholder.png'
 
 import api from '../../services/api';
 
 interface ApplyProps{
   applicant: {    
+    _id: string;
     battleTag: string;
     charName: string;
     className:string;
@@ -17,7 +26,7 @@ interface ApplyProps{
 }
 
 const ApplyCard: React.FC<ApplyProps> = ({ applicant }) => {
-  const [rioInfo, setRioInfo] = useState<any>()
+  const [raiderioInfo, setRaiderioInfo] = useState<any>()
   const [ilvl, setIlvl] = useState<any>()
   const [progression, setProgression] = useState({
     Heroic: 0,
@@ -26,9 +35,9 @@ const ApplyCard: React.FC<ApplyProps> = ({ applicant }) => {
   const [io, setIo] = useState<any>()
 
   useEffect(() => {
-    api.rioInfoFetch(applicant.charName) 
-    .then(({ data }) => {            
-      setRioInfo(data)
+    api.getRaiderioInfo(applicant.charName) 
+    .then(({ data }) => {  
+      setRaiderioInfo(data)
       setIlvl(data.gear.item_level_equipped)      
       setProgression({
         Heroic: data.raid_progression["castle-nathria"].heroic_bosses_killed,
@@ -42,22 +51,41 @@ const ApplyCard: React.FC<ApplyProps> = ({ applicant }) => {
 
   return (            
     <Container>
-      <Card applyStatus={applicant.approvalStatus}>
-        <CardHeader>          
-          { rioInfo && <img src={`${rioInfo.thumbnail_url || ''} `} alt={`${rioInfo.thumbnail_url || ''}`}/> }        
-          <div>
-            <h3>{applicant.charName}</h3>
-            <p>{applicant.battleTag}</p>
-          </div>          
-        </CardHeader>
-        <CardBody>          
-          <p>{`${applicant.mainSpec} ${applicant.className}`} - <span>{`${ilvl || ''}ilvl`}</span></p> 
-          <p>{`Raider.io: ${io || ''}`}</p>
-          <p>{`Progressão: ${progression.Heroic || ''}/10H - ${progression.Mythic || ''}/10M`}</p>
-        </CardBody>      
-      </Card>      
-    </Container>
-    
+      <Link to={`/apply/${applicant._id}`}>
+        <Card applyStatus={applicant.approvalStatus}>
+          <CardHeader 
+            playerClass={applicant.className} 
+            io={io}
+          >          
+            <img src={raiderioInfo?.thumbnail_url || avatar_placeholder} alt=""/>       
+            <div>
+              <h3>{applicant.charName}</h3>
+              <p>{applicant.battleTag}</p>
+            </div>
+           {!raiderioInfo ? null :  <span>{io}</span>}
+          </CardHeader>
+          <CardBody>          
+            <h4>
+              {`
+                ${applicant.mainSpec} 
+                ${!applicant.offSpec ? '' : `/ ${applicant.offSpec}`} ${applicant.className}
+              `}
+            </h4> 
+            { raiderioInfo ? 
+              <>
+                <div>
+                  <span>{` ${progression.Heroic || '0'}/10H`}</span>
+                  <span>{`${progression.Mythic || '0'}/10M`}</span>
+                  <span>{`${ilvl || '0' } ilvl`}</span>
+                </div>
+              </>
+              :            
+              <p>Player não possui informações no Raider.io ou Informou o nome errado.</p>
+            }
+          </CardBody>      
+        </Card>
+      </Link> 
+    </Container>       
   );
 }
 

@@ -6,8 +6,8 @@ interface AccordionProps{
 
 export const Card = styled.article`
   width: 100%;
-  margin-bottom: 24px;
-  color: var(--color-text-secondary);    
+  margin-top: 24px;
+  color: var(--color-text-secondary);   
 `
 
 export const CardTitle = styled.h3`

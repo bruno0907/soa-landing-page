@@ -1,12 +1,11 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
+export const Container = styled.div`  
   width: 100%;
-  flex: 1;  
-  display: flex;
-  
-  align-items: flex-start;
-  justify-content: flex-start;  
+  height: 100%;
+  display: flex;  
+  align-items: center;
+  justify-content: center;
 
   hr{
     width: 100%;    
@@ -15,25 +14,27 @@ export const Container = styled.div`
   }
 `
 
-export const Sidebar = styled.aside`  
-  height: 100vh;  
-  padding: 28px 20px;
-  background: var(--color-secondary);
+export const Sidebar = styled.aside`   
+  height: 100%;
+  min-height: 550px;  
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  padding: 28px 20px;
+  background: var(--color-box-background);
 
 
   header{        
-    div{
+    img{
+      flex-shrink: 0;
       width: 62px;
       height: 62px;
-      border: solid 2px var(--color-text-primary);
-      background: var(--color-text-secondary);
-      border-radius: 31px;
+      border: solid 2px var(--color-secondary);
+      background: var(--color-background);
+      border-radius: 50%;
       transition: filter 0.2s;
-      cursor: pointer;
+      cursor: pointer;      
     }    
   }
 
@@ -71,9 +72,10 @@ export const Sidebar = styled.aside`
 `
 
 export const Content = styled.div`
+  width: 100%;
+  height: 100%;
   display: flex;
-  flex-direction: column;
-  flex: 1;
+  flex-direction: column;  
   align-items: flex-start;
   justify-content: flex-start;
   padding: 20px;
@@ -100,21 +102,13 @@ export const Header = styled.header`
 `
 
 export const Main = styled.main`
-  display: flex;
-  flex-direction: column;
   width: 100%;
   height: 100%;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;  
 `
 
-export const ApplyList = styled.div`
+export const ApplyList = styled.ul`  
   display: flex;
-  flex-direction: column;
-  margin-bottom: 32px;
-
-  ul{
-    display: flex;
-    flex-wrap: wrap;    
-  }
-
+  flex-wrap: wrap;
 `

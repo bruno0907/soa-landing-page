@@ -5,6 +5,8 @@ import { FiPower, FiCheck, FiAlertTriangle, FiX, } from 'react-icons/fi';
 import ApplyCard from '../../components/ApplyCard';
 import PageLoader from '../../components/Loader';
 
+import avatar_placeholder from '../../assets/images/avatar_placeholder.png'
+
 import api from '../../services/api'
 
 import { ApplyList, 
@@ -28,22 +30,23 @@ interface ApplyProps{
 
 const Dashboard: React.FC = () => {
   const history = useHistory()  
-  const [applicants, setApplicants] = useState<[]>()  
-  const [loading, setLoading] = useState(false)
+  const [applicants, setApplicants] = useState<[]>()    
+  
+  const token = localStorage.getItem('@SoA-Admin:Token')
+  !token && history.push('/')
 
   useEffect(() => {
     api.getApplies()
     .then(response => {      
       if(!response){
-        setLoading(true)
         throw new Error('No response from the server')
       }
       const { data } = response
       const { applies } = data
-      setApplicants(applies)
-      return setLoading(false)      
+      setApplicants(applies)         
     })
     .catch(error => console.error(error.message))
+
   }, [])
 
   const newAppliesCounter = applicants?.length
@@ -52,53 +55,54 @@ const Dashboard: React.FC = () => {
 
 
   const logout = () => {
-    // Limpar token do localStorage
-    // Limpar token do Admin no BD
+    const rememberMe = localStorage.getItem('@SoA-Admin:RememberMe')
+
+    if(!rememberMe){
+      localStorage.removeItem('@SoA-Admin:Token')
+    }
     return history.push('/')
   }
 
   return (
-    <Container>
-      { loading ? <PageLoader /> : <>
-          <Sidebar>
-            <header>
-              <div></div>
-            </header>
-            <div>
-              <button onClick={() => logout()}>
-                <FiAlertTriangle />
-              </button>
-              <button onClick={() => logout()}>
-                <FiCheck />
-              </button>
-              <button onClick={() => logout()}>
-                <FiX />
-              </button>
-            </div>
-            <button onClick={() => logout()}>
-              <FiPower />
-            </button>
-          </Sidebar>
-          
-          <Content>
-            <Header>
-              <h1>Sons of Aiur Applies Dashboard</h1>
-              <span>Você possui {newAppliesCounter} novos applies</span>
-            </Header>
-            <hr/>
-            <Main>
-              <ApplyList>                
-                <ul>
-                  { applicants?.map((applicant: ApplyProps) => 
-                    <Link to={`/apply/${applicant._id}`} key={applicant._id}>
-                      <ApplyCard applicant={applicant}/>              
-                    </Link>
-                  )}
-                </ul>
-              </ApplyList>  
-            </Main>
-          </Content>
-      </>}
+    <Container>      
+      <Sidebar>
+        <header>
+          <img src={avatar_placeholder} alt="" />
+        </header>
+        <div>
+          <button onClick={() => logout()}>
+            <FiAlertTriangle />
+          </button>
+          <button onClick={() => logout()}>
+            <FiCheck />
+          </button>
+          <button onClick={() => logout()}>
+            <FiX />
+          </button>
+        </div>
+        <button onClick={() => logout()}>
+          <FiPower />
+        </button>
+      </Sidebar>
+      
+      <Content>
+        <Header>
+          <h1>Sons of Aiur Applies Dashboard</h1>
+          <span>Você possui {newAppliesCounter} novos applies</span>
+        </Header>
+        <hr/>
+        <Main>
+          <ApplyList>
+            { !applicants ? <PageLoader /> :                
+              <>
+              { applicants.map((applicant: ApplyProps) =>                 
+                <ApplyCard key={applicant._id} applicant={applicant}/>  
+              )}
+              </>
+            }
+          </ApplyList>  
+        </Main>
+      </Content>      
     </Container>
   );
 }

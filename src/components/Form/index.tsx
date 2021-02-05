@@ -1,8 +1,6 @@
 import { useState, useEffect, useCallback, ChangeEvent, FormEvent } from 'react'
 
-import { Link } from 'react-router-dom'
-
-import { GoCheck, GoX } from 'react-icons/go'
+import { GoCheck, GoX, GoAlert } from 'react-icons/go'
 
 import Input from '../Input'
 import Select from '../Select'
@@ -10,7 +8,12 @@ import Textarea from '../Textarea'
 
 import PageLoader from '../Loader'
 
-import { Container, Form, FormSection, FormButton, FormSuccess, FormError } from './styles'
+import { Container, 
+  Form, 
+  FormSection, 
+  FormButton, 
+  FormFallback, 
+} from './styles'
 import api from '../../services/api'
 
 interface ClassesProps{  
@@ -31,10 +34,9 @@ export default function ApplyForm(){
   const [classSpecs, setClassSpecs] = useState<Array<unknown>>([])   
 
   const [applyStatus, setApplyStatus] = useState('PENDING')
-  const [loading, setLoading] = useState(false)  
+  const [loading, setLoading] = useState(true)  
 
-  useEffect(() => {    
-    setLoading(true)
+  useEffect(() => {        
     api.getClasses()
       .then(response => {
         if(!response) throw new Error('No response from the server.')
@@ -44,8 +46,14 @@ export default function ApplyForm(){
                    
         setClassesList(classes)
         setLoading(false)
+        return
       })
-      .catch(error => console.error(error.message))
+      .catch(error => {
+        setApplyStatus('OUT-OF-SERVICE')
+        setLoading(false)
+        return
+      })
+
   }, [])
 
   
@@ -88,7 +96,7 @@ export default function ApplyForm(){
       const response = await api.newApply(data)          
       if(!response){
         throw new Error('Um erro ocorreu ao concluir seu apply.')
-      }
+      }      
       setApplyStatus('SUCCESS')
       setLoading(false)      
       return  
@@ -103,96 +111,103 @@ export default function ApplyForm(){
 
   return(
     <Container>
-      { loading === false ?
       <Form onSubmit={handleSubmit}> 
-        { applyStatus === 'PENDING' && 
+        { loading ? <PageLoader /> : 
           <>
-            <h2>Formulário de Apply</h2>
-            <FormSection>
-              <Input 
-                label="Battle Tag"
-                name="battleTag"          
-                value={battleTag}
-                onChange={event => setBattleTag(event.target.value)}
-              />
-              <Input 
-                label="Nome do Personagem"
-                name="charName"          
-                value={charName}
-                onChange={event => setCharName(event.target.value)}
-              />        
-            </FormSection>
-            <FormSection>
-              <Select 
-                label="Classe"
-                name="class"
-                value={className}
-                onChange={event => handleClassChange(event)}
-              >
-                <option hidden />                
-                { classesList.map(gameClass => 
-                  <option key={gameClass._id} value={gameClass.className}>{gameClass.className}</option>
-                )}   
-              </Select>
-              { className.length <= 0 ?
-                null :
-              <>              
-              <Select 
-                label="Main Spec"
-                name="mainSpec"
-                value={mainSpec}
-                onChange={event => setMainSpec(event.target.value)}                                
-              >
-                <option hidden />
-                { classSpecs.map((spec: any) => 
-                  <option key={spec} value={spec}>{spec}</option>
-                )}
-              </Select>        
-              <Select 
-                label="Off Spec"
-                name="offSpec"
-                value={offSpec}
-                onChange={event => setOffSpec(event.target.value)}                                  
-              >
-                <option hidden />
-                { classSpecs.map((spec: any) => 
-                  <option key={spec} value={spec}>{spec}</option>
-                )}
-              </Select> 
-              </>
-              }
-            </FormSection>
-            <FormSection>
-              <Textarea
-                label="Informações adicionais"
-                name="about"          
-                value={about}
-                onChange={event => setAbout(event.target.value)}
-              />
-            </FormSection>
-            <FormSection>
-              <FormButton type="submit" disabled={validateSubmit}>Enviar</FormButton>
-            </FormSection>
-          </>
-        }    
+          { applyStatus === 'PENDING' && 
+            <>
+              <h2>Formulário de Apply</h2>
+              <FormSection>
+                <Input 
+                  label="Battle Tag"
+                  name="battleTag"          
+                  value={battleTag}
+                  onChange={event => setBattleTag(event.target.value)}
+                />
+                <Input 
+                  label="Nome do Personagem"
+                  name="charName"          
+                  value={charName}
+                  onChange={event => setCharName(event.target.value)}
+                />        
+              </FormSection>
+              <FormSection>
+                <Select 
+                  label="Classe"
+                  name="class"
+                  value={className}
+                  onChange={event => handleClassChange(event)}
+                >
+                  <option hidden />                
+                  { classesList.map(gameClass => 
+                    <option key={gameClass._id} value={gameClass.className}>{gameClass.className}</option>
+                  )}   
+                </Select>
+                { className.length <= 0 ? null :      
+                  <Select 
+                    label="Main Spec"
+                    name="mainSpec"
+                    value={mainSpec}
+                    onChange={event => setMainSpec(event.target.value)}                                
+                  >
+                    <option hidden />
+                    { classSpecs.map((spec: any) => 
+                      <option key={spec} value={spec}>{spec}</option>
+                    )}
+                  </Select>  
+                }
+                { mainSpec.length <= 0 ? null :      
+                <Select 
+                  label="Off Spec"
+                  name="offSpec"
+                  value={offSpec}
+                  onChange={event => setOffSpec(event.target.value)}                                  
+                >
+                  <option hidden />
+                  { classSpecs.map((spec: any) => 
+                    <option key={spec} value={spec}>{spec}</option>
+                  )}
+                </Select> 
+                }
+              </FormSection>
+              <FormSection>
+                <Textarea
+                  label="Informações adicionais"
+                  name="about"          
+                  value={about}
+                  onChange={event => setAbout(event.target.value)}
+                />
+              </FormSection>
+              <FormSection>
+                <FormButton type="submit" disabled={validateSubmit}>Enviar</FormButton>
+              </FormSection>
+            </>
+          }    
 
-        { applyStatus === 'SUCCESS' &&
-          <FormSuccess>
-            <GoCheck size={180} />
-            <h1>Apply realizado com sucesso!</h1>
-            <p>Agora basta aguardar nosso contato.</p>
-          </FormSuccess> 
+          { applyStatus === 'SUCCESS' &&
+            <FormFallback>
+              <GoCheck size={180} color="#00ff04" />
+              <h3>Apply realizado com sucesso!</h3>
+              <p>Agora basta aguardar nosso contato.</p>
+            </FormFallback> 
+          }
+          { applyStatus === 'ERROR' &&
+            <FormFallback>
+              <GoX size={180} color="#822121" />
+              <h3>Houve um erro ao enviar seu apply!</h3>
+              <a href="https://discord.gg/9Be497S" target="_blank" rel="noopener noreferrer">Por favor contate a equipe.</a>
+            </FormFallback>
+          }        
+          { applyStatus === 'OUT-OF-SERVICE' &&
+            <FormFallback>
+              <GoAlert size={140} color="#ffff00"/>
+              <h3>Serviço indisponível no momento! Tente novamente mais tarde</h3>            
+              <a href="https://discord.gg/9Be497S" target="_blank" rel="noopener noreferrer">Por favor contate a equipe.</a>
+            </FormFallback>
+          } 
+          </>
         }
-        { applyStatus === 'ERROR' &&
-          <FormError>
-            <GoX size={180}/>
-            <h1>Houve um erro ao enviar seu apply!</h1>
-            <Link to="https://discord.gg/ucBZSUT2" target="_blank" rel="noopener noreferrer">Por favor contate a equipe.</Link>
-          </FormError>
-        }        
       </Form>
-      : <PageLoader />
-      }
     </Container>    
   )
   
