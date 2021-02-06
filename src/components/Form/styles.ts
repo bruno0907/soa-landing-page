@@ -1,7 +1,7 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 export const Container = styled.div`        
-  width: 565px;
+  width: 490px;
   min-height: 570px;
   display: flex;
   flex-direction: column;
@@ -23,59 +23,35 @@ export const Form = styled.form`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: var(--color-box-background);
-  padding: 36px;  
+  background: var(--color-box-background);  
+  padding: 48px;  
   border-radius: 12px;  
+
+  div + div {
+    margin-top: 12px;
+  }
 
   h2{    
     text-align: center;
     margin-bottom: 28px;
     color: var(--color-text-primary);
   }
+
+  @media(max-width: 550px){
+    padding: 22px;
+
+    h2{
+      font-size: 1.5rem;
+    }
+  }
 ` 
 
 export const FormSection = styled.div`
   width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  margin-bottom: 12px;
-
-    div + div{      
-      margin-left: 8px;
-
-      @media(max-width: 1140px){
-        margin-left: 0;
-        margin-top: 8px;
-      }
-    }    
-
-    @media(max-width: 1140px){
-      flex-direction: column;
-    }
-`
-
-export const FormButton = styled.button`
-  width: 80%;  
-  padding: 16px 21px;
-  margin-top: 24px;
-  border: none;
-  border-radius: 12px; 
-  background: var(--color-primary);
-  color: var(--color-text-primary);  
-  font-weight: 500;      
-  cursor: pointer;
-  transition: opacity .1s;
-
-    &:hover{
-      filter: opacity(.9);
-    }
-
-  ${({ disabled }) => disabled && css`
-    opacity: .5;
-    background: grey;   
-    pointer-events: none;
-  `}
+  justify-content: center;  
 `
 
 export const FormFallback = styled.div`

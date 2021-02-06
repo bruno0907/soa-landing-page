@@ -13,8 +13,7 @@ interface PlayerClassProps{
 }
 
 export const Container = styled.div`
-  width: 100%;  
-  min-height: 100vh;
+  width: 100%;    
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -73,11 +72,12 @@ export const Header = styled.header<StatusProps>`
     `}
   }  
 
-  @media(max-width: 620px){
+  @media(max-width: 730px){
     flex-direction: column;
+    padding: 0;
 
     h1{
-      margin-bottom: 12px;
+      margin: 12px 0;
     }
   }
 `
@@ -312,8 +312,7 @@ export const PlayerAbout = styled.div`
   width: 80%;
   margin: 48px 0;
 
-  h3{
-    font-size: 1.5rem;
+  h3{    
     color: var(--color-text-primary);
     margin-bottom: 8px;
   }
@@ -331,17 +330,14 @@ export const LinksSection = styled.div`
   align-items: center;
   justify-content: center;
 
-  h3{
-    font-size: 1.5rem;
+  h3{    
     color: var(--color-text-primary);
     margin-bottom: 8px;
   }
 
   div{
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
+    flex-wrap: wrap;        
 
     a{
       padding: 12px 24px;
@@ -350,19 +346,10 @@ export const LinksSection = styled.div`
       background-color: var(--color-background);
       font-weight: 600;
       font-size: 1.2rem;    
+      margin: 4px;
     }
 
-    a + a{
-      margin-left: 8px;
-    }
-
-    @media(max-width: 620px){
-      a{
-        margin-top: 8px;
-      }
-    }
   }
-  
 
 `
 

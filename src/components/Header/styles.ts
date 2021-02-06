@@ -10,6 +10,7 @@ export const Header = styled.nav`
 
     @media(max-width: 550px){
       flex-direction: column;
+      padding: 22px;
     }
 
     h1{
@@ -32,8 +33,8 @@ export const Header = styled.nav`
         filter: opacity(.9);
       }
 
-      @media(max-width: 550px){
-        margin-top: 12px;
+      @media(max-width: 550px){        
+        margin-top: 42px;
       }
   }
 

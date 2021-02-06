@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 export const Container = styled.div`
   width: 100%;
@@ -126,29 +126,6 @@ export const Remember = styled.div`
       cursor: pointer;
     }
   }
-`
-
-export const FormButton = styled.button`
-  width: 80%;  
-  padding: 16px 21px;
-  margin: 24px 0;
-  border: none;
-  border-radius: 12px; 
-  background: var(--color-primary);
-  color: var(--color-text-primary);  
-  font-weight: 500;      
-  cursor: pointer;
-  transition: opacity .1s;
-
-    &:hover{
-      filter: opacity(.9);
-    }
-
-  ${({ disabled }) => disabled && css`
-    opacity: .5;
-    background: grey;   
-    pointer-events: none;
-  `}
 `
 
 export const ErrorBox = styled.span`

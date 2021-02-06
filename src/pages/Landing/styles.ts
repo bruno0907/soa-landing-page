@@ -18,6 +18,10 @@ export const Content = styled.main`
 
     @media(max-width: 1020px){
       flex-direction: column;
-      align-items: center;
+      align-items: center;      
+    }
+
+    @media(max-width: 550px){
+      padding: 22px;
     }
 `

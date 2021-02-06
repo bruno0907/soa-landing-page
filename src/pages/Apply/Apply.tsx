@@ -3,6 +3,8 @@ import { Link, useHistory, useParams } from 'react-router-dom';
 
 import { FiArrowLeft, FiCheck, FiX } from "react-icons/fi";
 
+import Loader from 'react-loader-spinner';
+
 import { Container, 
   Header, 
   ApplyContent, 
@@ -21,7 +23,7 @@ import { Container,
   DeleteApplyButton,
 } from './styles';
 import api from '../../services/api';
-import PageLoader from '../../components/Loader';
+
 
 interface ApplyProps{
   id: string;
@@ -94,7 +96,12 @@ const Apply: React.FC<ApplyProps> = () => {
   return (    
     <Container>      
       { loading === true
-        ? <PageLoader />
+        ? <Loader
+            type="ThreeDots"
+            color="#009ae4"
+            height={100}
+            width={100}      
+          />    
         : <>            
             <Header status={applyInfo?.approvalStatus || ''}>
               <Link to="/dashboard">

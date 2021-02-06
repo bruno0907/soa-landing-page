@@ -1,17 +1,17 @@
-import { useState, useEffect, useCallback, FormEvent } from 'react'
+import React, { useState, useEffect, useCallback, FormEvent } from 'react'
 
 import { GoCheck, GoX, GoAlert } from 'react-icons/go'
 
 import Input from '../Input'
 import Select from '../Select'
 import Textarea from '../Textarea'
+import Button from '../Button'
 
-import PageLoader from '../Loader'
+import Loader from 'react-loader-spinner'
 
 import { Container, 
   Form, 
-  FormSection, 
-  FormButton, 
+  FormSection,   
   FormFallback, 
 } from './styles'
 import api from '../../services/api'
@@ -111,7 +111,14 @@ export default function ApplyForm(){
   return(
     <Container>
       <Form onSubmit={handleSubmit}> 
-        { loading ? <PageLoader /> : 
+        { loading ? 
+          <Loader
+            type="ThreeDots"
+            color="#009ae4"
+            height={100}
+            width={100}      
+          />    
+        : 
           <>
           { applyStatus === 'PENDING' && 
             <>
@@ -178,7 +185,7 @@ export default function ApplyForm(){
                 />
               </FormSection>
               <FormSection>
-                <FormButton type="submit" disabled={validateSubmit}>Enviar</FormButton>
+                <Button type="submit" disabled={validateSubmit}>Enviar</Button>
               </FormSection>
             </>
           }    

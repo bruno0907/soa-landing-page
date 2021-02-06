@@ -26,8 +26,8 @@ export const CardTitle = styled.h3`
 `
 
 export const CardBody = styled.div<AccordionProps>`
-  padding: 8px;
-  background-color: var(--color-secondary);
+  padding: 22px;
+  /* background-color: var(--color-secondary); */
   
   p{
     line-height: 150%;

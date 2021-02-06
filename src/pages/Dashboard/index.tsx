@@ -2,10 +2,11 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 import { useHistory, Link } from 'react-router-dom';
 
-import { FiPower, FiCheck, FiAlertTriangle, FiX, FiList } from 'react-icons/fi';
+import { FiPower, FiCheck, FiAlertTriangle, FiX, FiList, FiMenu } from 'react-icons/fi';
 
 import ApplyCard from '../../components/ApplyCard';
-import PageLoader from '../../components/Loader';
+
+import Loader from 'react-loader-spinner';
 
 import avatar_placeholder from '../../assets/images/avatar_placeholder.png'
 
@@ -13,10 +14,11 @@ import api from '../../services/api'
 
 import { ApplyList, 
   Container, 
-  HeaderBar, 
+  MenuBar, 
   Content, 
   Header, 
-  Main, 
+  Main,
+  MenuButton, 
 } from './styles';
 
 interface ApplyProps{
@@ -34,22 +36,25 @@ const Dashboard: React.FC = () => {
   const history = useHistory()  
   const [applies, setApplies] = useState<ApplyProps[]>()    
   const [appliesCount, setAppliesCount] = useState<ApplyProps[]>()  
+  const [menuVisibility, setMenuVisibility] = useState(false)
   
   const token = localStorage.getItem('@SoA-Admin:Token')
   !token && history.push('/')  
 
   const getApplies = useCallback(async(approvalStatus?: string) => {
     if(approvalStatus){
+      setMenuVisibility(false)
       const pendingApplications = await api.getApplies(`?status=${approvalStatus}`)
       if(!pendingApplications) return 
       const { data } = pendingApplications
       return setApplies(data)
     }
     const response = await api.getApplies()
-
-    if(!response) return
-
+    setMenuVisibility(false)
+    
+    if(!response) return  
     const { data } = response
+    
     setApplies(data.applies)    
     setAppliesCount(data.applies)
   }, [])
@@ -70,9 +75,18 @@ const Dashboard: React.FC = () => {
     return history.push('/')
   }
 
+  const handleMenu = () => setMenuVisibility(!menuVisibility)
+  
   return (
-    <Container>      
-      <HeaderBar>        
+    <Container>  
+      <MenuButton onClick={handleMenu}>
+        { menuVisibility === false ?
+          <FiMenu size={24} />
+          :
+          <FiX size={24} />
+        }
+      </MenuButton>    
+      <MenuBar isOpen={menuVisibility}>        
         <Link to="/">
           <img src={avatar_placeholder} alt="" />
         </Link>        
@@ -97,7 +111,7 @@ const Dashboard: React.FC = () => {
         <button onClick={() => logout()}>
           <FiPower size={24}/>
         </button>
-      </HeaderBar>
+      </MenuBar>
       
       <Content>
         <Header>
@@ -109,16 +123,25 @@ const Dashboard: React.FC = () => {
         </Header>
         <hr/>
         <Main>
-          <ApplyList>
-            { !applies ? <PageLoader /> :                
-              <>
-              { applies.length <= 0 ? <Container>Nenhum apply encontrado</Container> :
-              applies.map((apply: ApplyProps) =>                 
-                <ApplyCard key={apply._id} apply={apply}/>  
-              )}
-              </>
-            }
-          </ApplyList>  
+          { !applies ? 
+            <Container>
+              <Loader
+                type="ThreeDots"
+                color="#009ae4"
+                height={100}
+                width={100}      
+              />
+            </Container>
+            :                
+            <ApplyList>
+                <>
+                { applies.length <= 0 ? <Container>Nenhum apply encontrado</Container> :
+                applies.map((apply: ApplyProps) =>                 
+                  <ApplyCard key={apply._id} apply={apply}/>  
+                )}
+                </>
+            </ApplyList>  
+          }
         </Main>
       </Content>      
     </Container>

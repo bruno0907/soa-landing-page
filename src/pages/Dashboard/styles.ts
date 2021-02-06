@@ -1,4 +1,8 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+interface MenuProps{
+  isOpen: boolean;
+}
 
 export const Container = styled.div`  
   width: 100%;
@@ -6,7 +10,7 @@ export const Container = styled.div`
   display: flex;  
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: center;  
 
   hr{
     width: 100%;    
@@ -16,12 +20,37 @@ export const Container = styled.div`
 
   @media(max-width: 980px){
       flex-direction: row;
-      align-items: flex-start;
-      justify-content: flex-start;
+
+
+
     }
 `
 
-export const HeaderBar = styled.header` 
+export const MenuButton = styled.button`
+  width: 52px;
+  height: 52px;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 20px;
+  right: 20px;  
+  border-radius: 8px;
+  background: transparent;
+  border: none;
+  display: none;
+  cursor: pointer;
+
+    svg{
+      stroke: var(--color-text-primary);
+    }
+
+    @media(max-width: 980px){
+      display: block;  
+    }
+`
+
+export const MenuBar = styled.header<MenuProps>` 
   width: 100%; 
   display: flex;  
   align-items: center;  
@@ -32,6 +61,7 @@ export const HeaderBar = styled.header`
   left: 0;
   right: 0;  
   z-index: 999;
+  transition: transform .5s;
   
   img{
     margin-right: 24px;
@@ -89,7 +119,7 @@ export const HeaderBar = styled.header`
   }
 
   @media(max-width: 980px){  
-      position: sticky;
+      position: fixed;
       top: 0;
       left: 0;
       width: fit-content;    
@@ -97,8 +127,11 @@ export const HeaderBar = styled.header`
       min-height: 100%;
       flex-direction: column;
       align-items: center;
-      justify-content: space-between;     
-
+      justify-content: space-between;   
+      ${({ isOpen }) => isOpen === false 
+        ? css`transform: translateX(-150px);` 
+        : css`transform: translateX(0);`
+      };
 
       img{
         margin: 0;

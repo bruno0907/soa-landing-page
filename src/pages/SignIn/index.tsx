@@ -1,14 +1,15 @@
 import jwt_decode from 'jwt-decode'
 
 import React, { FormEvent, useState, useEffect } from 'react';
+import Loader from 'react-loader-spinner';
 import { useHistory, Link } from 'react-router-dom'
 
 import Input from '../../components/Input';
+import Button from '../../components/Button';
 
-import PageLoader from '../../components/Loader';
 import api from '../../services/api';
 
-import { Container, Form, Remember, FormButton, ErrorBox } from './styles';
+import { Container, Form, Remember, ErrorBox } from './styles';
 
 interface UserAuthProps{
   username: string;
@@ -71,10 +72,12 @@ const SignIn: React.FC = () => {
         localStorage.setItem('@SoA-Admin:RememberMe', JSON.stringify(rememberMe))
       }
       localStorage.setItem('@SoA-Admin:Token', token)
+      setIsLoading(false)
       history.push('/dashboard')  
           
     })
-    .catch(error => {         
+    .catch(error => {      
+      setIsLoading(false)   
       setLoginError(true)          
     })
     
@@ -84,45 +87,51 @@ const SignIn: React.FC = () => {
     <Container>
       <h1>SONS OF AIUR</h1> 
       <h3>Área restrita</h3>
-      { isLoading ? <PageLoader /> : 
-        <Form onSubmit={handleSubmit}>        
-          <legend>Faça seu login</legend>
-          <fieldset>
-            <Input 
-              label="Usuário"
-              name="username"
-              value={username}              
-              onChange={event => setUsername(event.target.value)}
-              onKeyUp={() => loginError &&setLoginError(false)}
-            />
-            <Input 
-              type="password"
-              label="Senha"
-              name="password"
-              value={password}
-              onChange={event => setPassword(event.target.value)}
-            />
-          </fieldset>
-          { loginError &&
-            <ErrorBox>Usuário ou senha inválidos! Tente novamente.</ErrorBox>
-          }
-          <Remember>
-            <div>            
-              <input 
-                id="remember"
-                type="checkbox" 
-                name="remember" 
-                checked={rememberMe}
-                onChange={event => setRememberMe(event.target.checked)}
-              />            
-              <span></span>
-              <label htmlFor="remember">Lembrar-me</label>
-            </div>
-            <Link to ="/forgot-password">Esqueci minha senha!</Link>
-          </Remember>
-          <FormButton type="submit" disabled={handleValidation}>Entrar</FormButton>
-          <Link to="/">Voltar</Link>
-        </Form>
+      { isLoading 
+        ? <Loader
+            type="ThreeDots"
+            color="#009ae4"
+            height={100}
+            width={100}      
+          /> 
+        : <Form onSubmit={handleSubmit}>        
+            <legend>Faça seu login</legend>
+            <fieldset>
+              <Input 
+                label="Usuário"
+                name="username"
+                value={username}              
+                onChange={event => setUsername(event.target.value)}
+                onKeyUp={() => loginError &&setLoginError(false)}
+              />
+              <Input 
+                type="password"
+                label="Senha"
+                name="password"
+                value={password}
+                onChange={event => setPassword(event.target.value)}
+              />
+            </fieldset>
+            { loginError &&
+              <ErrorBox>Usuário ou senha inválidos! Tente novamente.</ErrorBox>
+            }
+            <Remember>
+              <div>            
+                <input 
+                  id="remember"
+                  type="checkbox" 
+                  name="remember" 
+                  checked={rememberMe}
+                  onChange={event => setRememberMe(event.target.checked)}
+                />            
+                <span></span>
+                <label htmlFor="remember">Lembrar-me</label>
+              </div>
+              <Link to ="/forgot-password">Esqueci minha senha!</Link>
+            </Remember>
+            <Button type="submit" disabled={handleValidation}>Entrar</Button>
+            <Link to="/">Voltar</Link>
+          </Form>
       }
     </Container>
   );
