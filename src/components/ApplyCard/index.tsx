@@ -13,7 +13,7 @@ import avatar_placeholder from '../../assets/images/avatar_placeholder.png'
 import api from '../../services/api';
 
 interface ApplyProps{
-  applicant: {    
+  apply: {    
     _id: string;
     battleTag: string;
     charName: string;
@@ -25,7 +25,7 @@ interface ApplyProps{
   }
 }
 
-const ApplyCard: React.FC<ApplyProps> = ({ applicant }) => {
+const ApplyCard: React.FC<ApplyProps> = ({ apply }) => {
   const [raiderioInfo, setRaiderioInfo] = useState<any>()
   const [ilvl, setIlvl] = useState<any>()
   const [progression, setProgression] = useState({
@@ -35,7 +35,7 @@ const ApplyCard: React.FC<ApplyProps> = ({ applicant }) => {
   const [io, setIo] = useState<any>()
 
   useEffect(() => {
-    api.getRaiderioInfo(applicant.charName) 
+    api.getRaiderioInfo(apply.charName) 
     .then(({ data }) => {  
       setRaiderioInfo(data)
       setIlvl(data.gear.item_level_equipped)      
@@ -47,28 +47,28 @@ const ApplyCard: React.FC<ApplyProps> = ({ applicant }) => {
     })
     .catch(error => console.log(error))
 
-  }, [applicant.charName])
+  }, [apply.charName])
 
   return (            
     <Container>
-      <Link to={`/apply/${applicant._id}`}>
-        <Card applyStatus={applicant.approvalStatus}>
+      <Link to={`/apply/${apply._id}`}>
+        <Card applyStatus={apply.approvalStatus}>
           <CardHeader 
-            playerClass={applicant.className} 
+            playerClass={apply.className} 
             io={io}
           >          
             <img src={raiderioInfo?.thumbnail_url || avatar_placeholder} alt=""/>       
             <div>
-              <h3>{applicant.charName}</h3>
-              <p>{applicant.battleTag}</p>
+              <h3>{apply.charName}</h3>
+              <p>{apply.battleTag}</p>
             </div>
            {!raiderioInfo ? null :  <span>{io}</span>}
           </CardHeader>
           <CardBody>          
             <h4>
               {`
-                ${applicant.mainSpec} 
-                ${!applicant.offSpec ? '' : `/ ${applicant.offSpec}`} ${applicant.className}
+                ${apply.mainSpec} 
+                ${!apply.offSpec ? '' : `/ ${apply.offSpec}`} ${apply.className}
               `}
             </h4> 
             { raiderioInfo ? 

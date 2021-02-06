@@ -9,8 +9,11 @@ interface HeaderProps{
   io: number;
 }
 
-export const Container = styled.li`  
+export const Container = styled.li`    
   list-style: none;  
+  width: 100%;
+  max-width: 350px;  
+  min-width: 310px;
   margin: 16px;   
   transition: filter .1s;
 
@@ -20,7 +23,7 @@ export const Container = styled.li`
 `
 
 export const Card = styled.article<ApplyStatus>`
-  width: 350px;
+  width: 100%;  
   border-radius: 8px;
   padding: 12px;
   background-color: var(--color-box-background);

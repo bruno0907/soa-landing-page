@@ -8,7 +8,7 @@ const index = () => {
       <h1>SONS OF AIUR</h1>      
       <Link to="/sign-in">
         <button>
-          Sign-In
+          Área Restrita
         </button>
       </Link>      
     </Header>    

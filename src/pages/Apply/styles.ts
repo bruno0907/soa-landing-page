@@ -413,11 +413,14 @@ export const ButtonSection = styled.div`
 `
 
 export const ApproveButton = styled.button`
-  background: var(--color-button-primary);
+  background: var(--color-approved);
 `
 
 export const RejectButton = styled.button`
   background: var(--color-button-secondary);
+`
+export const ReOpenButton = styled.button`
+  background: var(--color-button-primary);
 `
 
 export const DeleteApplyButton = styled.span`

@@ -17,8 +17,8 @@ import { Container,
   ButtonSection,
   ApproveButton,
   RejectButton,
-  DeleteApplyButton
-
+  ReOpenButton,
+  DeleteApplyButton,
 } from './styles';
 import api from '../../services/api';
 import PageLoader from '../../components/Loader';
@@ -155,16 +155,26 @@ const Apply: React.FC<ApplyProps> = () => {
                   </div>
                 </LinksSection>
 
-                <ButtonSection>
-                  <RejectButton type="button" onClick={() => handleApplyStatus('rejected')}>
-                    <FiX size={24} />
-                    Rejeitar Apply
-                  </RejectButton>
-                  <ApproveButton type="button"onClick={() => handleApplyStatus('approved')}>
-                    <FiCheck size={24} />
-                    Aprovar Apply
-                  </ApproveButton>
-                </ButtonSection>
+                <ButtonSection>  
+                  { applyInfo?.approvalStatus === 'pending' && 
+                    <>
+                      <RejectButton type="button" onClick={() => handleApplyStatus('rejected')}>
+                        <FiX size={24} />
+                        Rejeitar Apply
+                      </RejectButton>
+                      <ApproveButton type="button"onClick={() => handleApplyStatus('approved')}>
+                        <FiCheck size={24} />
+                        Aprovar Apply
+                      </ApproveButton>
+                    </>
+                  }  
+                  { applyInfo?.approvalStatus === 'rejected' && 
+                    <ReOpenButton type="button"onClick={() => handleApplyStatus('pending')}>
+                      <FiCheck size={24} />
+                      Reabrir Apply
+                    </ReOpenButton>
+                  }   
+                  </ButtonSection>
               </ApplyBody>
 
             </ApplyContent>

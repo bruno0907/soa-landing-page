@@ -4,6 +4,7 @@ export const Container = styled.div`
   width: 100%;
   height: 100%;
   display: flex;  
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 
@@ -12,63 +13,119 @@ export const Container = styled.div`
     border: solid 0.5px var(--color-secondary);
     margin: 12px 0 24px;
   }
+
+  @media(max-width: 980px){
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
 `
 
-export const Sidebar = styled.aside`   
-  height: 100%;
-  min-height: 550px;  
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: 28px 20px;
+export const HeaderBar = styled.header` 
+  width: 100%; 
+  display: flex;  
+  align-items: center;  
+  padding: 20px 30px;
   background: var(--color-box-background);
-
-
-  header{        
-    img{
-      flex-shrink: 0;
-      width: 62px;
-      height: 62px;
-      border: solid 2px var(--color-secondary);
-      background: var(--color-background);
-      border-radius: 50%;
-      transition: filter 0.2s;
-      cursor: pointer;      
-    }    
-  }
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;  
+  z-index: 999;
+  
+  img{
+    margin-right: 24px;
+    flex-shrink: 0;
+    width: 62px;
+    height: 62px;
+    border: solid 2px var(--color-secondary);
+    background: var(--color-background);
+    border-radius: 50%;
+    transition: filter 0.2s;
+    cursor: pointer;      
+  }     
 
   div{
+    display: flex;
+
     button{
+      display: flex;
+      padding: 12px 18px;
+      align-items: center;
+      justify-content: center;
       background: var(--color-button-primary);
+      flex-shrink: 0;
     }
     button + button{
-      margin: 16px 0;
+      margin-left:  16px;
     }
   }
 
   button{
-    width: 48px;
-    height: 48px;
-    border-radius: 16px;
+    margin-left: auto;
+    padding: 12px;    
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: var(--color-button-secondary);
+    color: var(--color-text-primary);
+    font-size: .9rem;
     border: none;
     transition: filter 0.2s;
     cursor: pointer;
 
       svg{
-        stroke: var(--color-text-primary);
-        width: 24px;
-        height: 24px;
+        stroke: var(--color-text-primary);        
+      }
+
+      svg + span{
+        margin-left: 8px;
       }
 
       :hover{
         filter: brightness(110%);
       }      
   }
+
+  @media(max-width: 980px){  
+      position: sticky;
+      top: 0;
+      left: 0;
+      width: fit-content;    
+      padding: 38px 22px;;
+      min-height: 100%;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;     
+
+
+      img{
+        margin: 0;
+      }
+
+      div{
+        flex-direction: column;    
+
+        button{
+          flex-direction: column;
+          padding: 16px;
+
+          span{
+            display: none;
+          }
+        }    
+
+        button + button{
+          margin-left: 0;
+          margin-top: 16px
+        }
+      }
+
+      button{
+        margin: 0%;
+      }
+    }
 `
 
 export const Content = styled.div`
@@ -90,7 +147,7 @@ export const Header = styled.header`
   justify-content: space-between;
 
   h1{
-    font-size: 36px;
+    font-size: 2.5rem;
     line-height: 120%;
     color: var(--color-text-primary);
   }
@@ -99,13 +156,28 @@ export const Header = styled.header`
     color: var(--color-text-secondary);
     line-height: 120%;
   }
+
+  @media(max-width: 960px){
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    h1{
+      font-size: 2rem;
+    }
+
+    span{
+      margin-top: 16px;
+    }
+  }
 `
 
 export const Main = styled.main`
   width: 100%;
   height: 100%;
   display: flex;
-  flex-direction: column;  
+  flex-direction: column; 
+  
 `
 
 export const ApplyList = styled.ul`  

@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+
 import { useHistory, Link } from 'react-router-dom';
-import { FiPower, FiCheck, FiAlertTriangle, FiX, } from 'react-icons/fi';
+
+import { FiPower, FiCheck, FiAlertTriangle, FiX, FiList } from 'react-icons/fi';
 
 import ApplyCard from '../../components/ApplyCard';
 import PageLoader from '../../components/Loader';
@@ -11,10 +13,10 @@ import api from '../../services/api'
 
 import { ApplyList, 
   Container, 
+  HeaderBar, 
   Content, 
   Header, 
   Main, 
-  Sidebar 
 } from './styles';
 
 interface ApplyProps{
@@ -30,29 +32,34 @@ interface ApplyProps{
 
 const Dashboard: React.FC = () => {
   const history = useHistory()  
-  const [applicants, setApplicants] = useState<[]>()    
+  const [applies, setApplies] = useState<ApplyProps[]>()    
+  const [appliesCount, setAppliesCount] = useState<ApplyProps[]>()  
   
   const token = localStorage.getItem('@SoA-Admin:Token')
-  !token && history.push('/')
+  !token && history.push('/')  
 
-  useEffect(() => {
-    api.getApplies()
-    .then(response => {      
-      if(!response){
-        throw new Error('No response from the server')
-      }
-      const { data } = response
-      const { applies } = data
-      setApplicants(applies)         
-    })
-    .catch(error => console.error(error.message))
+  const getApplies = useCallback(async(approvalStatus?: string) => {
+    if(approvalStatus){
+      const pendingApplications = await api.getApplies(`?status=${approvalStatus}`)
+      if(!pendingApplications) return 
+      const { data } = pendingApplications
+      return setApplies(data)
+    }
+    const response = await api.getApplies()
 
+    if(!response) return
+
+    const { data } = response
+    setApplies(data.applies)    
+    setAppliesCount(data.applies)
   }, [])
+  
+  useEffect(() => {
+    getApplies()    
 
-  const newAppliesCounter = applicants?.length
+  }, [getApplies])
 
-
-
+  const newAppliesCounter = appliesCount?.filter(apply => apply.approvalStatus === 'pending').length || 0
 
   const logout = () => {
     const rememberMe = localStorage.getItem('@SoA-Admin:RememberMe')
@@ -65,38 +72,49 @@ const Dashboard: React.FC = () => {
 
   return (
     <Container>      
-      <Sidebar>
-        <header>
+      <HeaderBar>        
+        <Link to="/">
           <img src={avatar_placeholder} alt="" />
-        </header>
+        </Link>        
         <div>
-          <button onClick={() => logout()}>
-            <FiAlertTriangle />
+          <button onClick={() => getApplies('pending')}>
+            <FiAlertTriangle size={24}/>
+            <span>Applies pendentes</span>
           </button>
-          <button onClick={() => logout()}>
-            <FiCheck />
+          <button onClick={() => getApplies('approved')}>
+            <FiCheck size={24} />
+            <span>Applies aprovados</span>
           </button>
-          <button onClick={() => logout()}>
-            <FiX />
+          <button onClick={() => getApplies('rejected')}>
+            <FiX size={24}/> 
+            <span>Applies rejeitados</span>
+          </button>
+          <button onClick={() => getApplies()}>
+          <FiList size={24}/>
+            <span>Todos os applies</span>            
           </button>
         </div>
         <button onClick={() => logout()}>
-          <FiPower />
+          <FiPower size={24}/>
         </button>
-      </Sidebar>
+      </HeaderBar>
       
       <Content>
         <Header>
           <h1>Sons of Aiur Applies Dashboard</h1>
-          <span>Você possui {newAppliesCounter} novos applies</span>
+          { newAppliesCounter === 0 
+            ? <span>Nenhum apply no momento</span> 
+            : <span>Você possui <strong>{newAppliesCounter}</strong> {newAppliesCounter > 1 ? 'novos applies' : 'novo apply'}</span>
+          }
         </Header>
         <hr/>
         <Main>
           <ApplyList>
-            { !applicants ? <PageLoader /> :                
+            { !applies ? <PageLoader /> :                
               <>
-              { applicants.map((applicant: ApplyProps) =>                 
-                <ApplyCard key={applicant._id} applicant={applicant}/>  
+              { applies.length <= 0 ? <Container>Nenhum apply encontrado</Container> :
+              applies.map((apply: ApplyProps) =>                 
+                <ApplyCard key={apply._id} apply={apply}/>  
               )}
               </>
             }

@@ -28,30 +28,23 @@ interface AdminAuthProps{
 }
 
 class Api{
-  async getApplies(){
-    return await api.get('/applies')
+  async getClasses(){
+    return await api.get('/classes')
+  }
+
+  async getApplies(params?: string){
+    if(!params){
+      return await api.get(`/applies`)
+    }
+    return await api.get(`/applies${params}`)
   }
 
   async getApply(id: string){
     return await api.get(`/apply/${id}`)
   }
 
-  async getClasses(){
-    return await api.get('/classes')
-  }
-
   async newApply(data: ApplyProps){
     return await api.post('/applies', data)
-  }
-
-  async getRaiderioInfo(name: string){
-    const defaultParams = '?region=us&realm=azralon&name='
-    const extraInfoParams = '&fields=raid_progression%2Cmythic_plus_scores_by_season%3Acurrent%2Cgear'
-    return await rioApi.get(`${defaultParams}${name}&${extraInfoParams}`)
-  }
-
-  async adminAuth(data: AdminAuthProps){
-    return await api.post('/admin/sign-in', data)
   }
 
   async applyStatusHandle(id: string, status: string){
@@ -62,6 +55,16 @@ class Api{
 
   async applyRemove(id: string){
     return await api.delete(`/apply/${id}`)
+  }
+
+  async getRaiderioInfo(name: string){
+    const defaultParams = '?region=us&realm=azralon&name='
+    const extraInfoParams = '&fields=raid_progression%2Cmythic_plus_scores_by_season%3Acurrent%2Cgear'
+    return await rioApi.get(`${defaultParams}${name}&${extraInfoParams}`)
+  }
+
+  async adminAuth(data: AdminAuthProps){
+    return await api.post('/admin/sign-in', data)
   }
   
 }
