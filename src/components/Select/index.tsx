@@ -1,7 +1,7 @@
 import { InputHTMLAttributes, useMemo } from 'react'
 
 import { MdKeyboardArrowUp } from 'react-icons/md'
-import useVisible from '../../hooks/useVisible'
+import useVisible from '../../hooks/useVisibleHook'
 
 import { Container } from './styles'
 
