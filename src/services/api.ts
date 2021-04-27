@@ -1,16 +1,13 @@
 import axios from 'axios'
 
-// const baseURL = window.location.hostname === 'localhost' 
-// ? 'http://localhost:3333'
-// : 'https://soa-apply-backend.herokuapp.com'
+const soaApi = 'https://soa-apply-backend.herokuapp.com'
 
-const baseURL = 'https://soa-apply-backend.herokuapp.com'
-
-const api = axios.create({ baseURL })
+const api = axios.create({ baseURL: soaApi })
 
 const rioApi = axios.create({
   baseURL : 'https://raider.io/api/v1/characters/profile'
 })
+
 interface ApplyProps{
   battleTag: string;
   charName: string;
