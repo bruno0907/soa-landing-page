@@ -26,13 +26,15 @@ export const CardTitle = styled.h3`
 `
 
 export const CardBody = styled.div<AccordionProps>`
-  padding: 22px;
-  /* background-color: var(--color-secondary); */
+  padding: 22px; 
   
-  p{
-    line-height: 150%;
-    margin-bottom: 8px;
-    color: var(--color-text-primary);
+  ul{
+    li{
+      line-height: 150%;
+      margin-bottom: 10px;
+      color: var(--color-text-secondary);
+    }
+    
   }
 
   ${({ active }) => active === false 

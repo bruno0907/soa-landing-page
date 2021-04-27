@@ -1,14 +1,12 @@
 import axios from 'axios'
 
-const URI = window.location.hostname === 'localhost' 
-? 'http://localhost:3333'
-: 'https://soa-apply-backend.herokuapp.com'
+// const baseURL = window.location.hostname === 'localhost' 
+// ? 'http://localhost:3333'
+// : 'https://soa-apply-backend.herokuapp.com'
 
-console.log(URI)
+const baseURL = 'https://soa-apply-backend.herokuapp.com'
 
-const api = axios.create({
-  baseURL: URI
-})
+const api = axios.create({ baseURL })
 
 const rioApi = axios.create({
   baseURL : 'https://raider.io/api/v1/characters/profile'

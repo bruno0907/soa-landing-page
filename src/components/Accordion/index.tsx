@@ -1,15 +1,15 @@
-import { useState } from 'react'
+import { ReactNode, useState } from 'react'
 
 import { MdKeyboardArrowDown,  MdKeyboardArrowUp} from 'react-icons/md'
 
 import { Card, CardTitle, CardBody } from './styles'
 
 interface AccordionProps{
-  title: String;
-  body: String;  
+  title: String;  
+  children: ReactNode
 }
 
-const Accordion = ({ title, body }: AccordionProps) => {
+const Accordion = ({ title, children }: AccordionProps) => {
   const [active, setActive] = useState(false)
   
   const handleActive = () => {
@@ -26,7 +26,8 @@ const Accordion = ({ title, body }: AccordionProps) => {
         }
       </CardTitle>
       <CardBody active={active}>
-        {body.split('\n').map(str => <p key={Math.random()}>{str}</p>)}
+        {/* {body.split('\n').map(str => <p key={Math.random()}>{str}</p>)} */}
+        {children}
       </CardBody>
     </Card>
   )
