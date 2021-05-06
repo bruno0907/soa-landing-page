@@ -5,7 +5,7 @@ import Footer from '../../components/Footer';
 import Aside from '../../components/Aside';
 import ApplyForm from '../../components/Form';
 
-import { Container, Content } from './styles';
+import { Container, Content } from '../../styles/landing';
 
 const Landing: React.FC = () => {
   return (

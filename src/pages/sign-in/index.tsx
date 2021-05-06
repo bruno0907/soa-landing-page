@@ -11,7 +11,7 @@ import Loader from 'react-loader-spinner';
 
 import api from '../../services/api';
 
-import { Container, Form, Remember, ErrorBox } from './styles';
+import { Container, ErrorBox, Form, Remember } from '../../styles/sign-in'
 
 interface UserAuthProps{
   username: string;
@@ -78,7 +78,7 @@ function SignIn(){
       router.push('/dashboard')  
           
     })
-    .catch(error => {      
+    .catch(() => {      
       setIsLoading(false)   
       setLoginError(true)          
     })

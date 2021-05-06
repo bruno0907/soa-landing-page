@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router'
 
@@ -22,7 +22,7 @@ import { Container,
   RejectButton,
   ReOpenButton,
   DeleteApplyButton,
-} from './styles';
+} from '../../styles/apply';
 
 import api from '../../services/api';
 

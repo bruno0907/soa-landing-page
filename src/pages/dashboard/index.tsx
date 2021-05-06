@@ -17,7 +17,7 @@ import {
   Content, 
   Header,   
   MenuButton, 
-} from './styles';
+} from '../../styles/dashboard';
 
 interface ApplyProps{
   _id: string;
