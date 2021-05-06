@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 import { 
   Container, 
@@ -7,8 +7,6 @@ import {
   CardHeader,  
   CardBody 
 } from './styles'
-
-import avatar_placeholder from '../../assets/images/avatar_placeholder.png'
 
 import api from '../../services/api';
 
@@ -25,7 +23,7 @@ interface ApplyProps{
   }
 }
 
-const ApplyCard: React.FC<ApplyProps> = ({ apply }) => {
+const ApplyCard = ({ apply }: ApplyProps) => {
   const [raiderioInfo, setRaiderioInfo] = useState<any>()
   const [ilvl, setIlvl] = useState<any>()
   const [progression, setProgression] = useState({
@@ -33,9 +31,11 @@ const ApplyCard: React.FC<ApplyProps> = ({ apply }) => {
     Mythic: 0
   })
   const [io, setIo] = useState<any>()
+  
+  const [playerName,] = apply.charName.split(/(-|#)/)
 
   useEffect(() => {
-    api.getRaiderioInfo(apply.charName) 
+    api.getRaiderioInfo(playerName) 
     .then(({ data }) => {  
       setRaiderioInfo(data)
       setIlvl(data.gear.item_level_equipped)      
@@ -47,19 +47,20 @@ const ApplyCard: React.FC<ApplyProps> = ({ apply }) => {
     })
     .catch(error => console.log(error))
 
-  }, [apply.charName])
+  }, [playerName])
+
 
   return (            
     <Container>
-      <Link to={`/apply/${apply._id}`}>
+      <Link href={`/apply/${apply._id}`}>
         <Card applyStatus={apply.approvalStatus}>
           <CardHeader 
             playerClass={apply.className} 
             io={io}
           >          
-            <img src={raiderioInfo?.thumbnail_url || avatar_placeholder} alt=""/>       
+            <img src={raiderioInfo?.thumbnail_url || "images/avatar_placeholder.png"} alt=""/>       
             <div>
-              <h3>{apply.charName}</h3>
+              <h3>{playerName}</h3>
               <p>{apply.battleTag}</p>
             </div>
            {!raiderioInfo ? null :  <span>{io}</span>}

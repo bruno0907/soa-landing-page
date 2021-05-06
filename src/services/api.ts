@@ -34,7 +34,7 @@ class Api{
     return await api.get(`/applies${params}`)
   }
 
-  async getApply(id: string){
+  async getApply(id: string | string[]){
     return await api.get(`/apply/${id}`)
   }
 
@@ -42,20 +42,26 @@ class Api{
     return await api.post('/applies', data)
   }
 
-  async applyStatusHandle(id: string, status: string){
+  async applyStatusHandle(id: string | string[], status: string | string[]){
     return await api.post(`/apply/${id}`, {
       approvalStatus: status
     })
   }
 
-  async applyRemove(id: string){
+  async applyRemove(id: string | string[]){
     return await api.delete(`/apply/${id}`)
   }
 
-  async getRaiderioInfo(name: string){
-    const defaultParams = '?region=us&realm=azralon&name='
-    const extraInfoParams = '&fields=raid_progression%2Cmythic_plus_scores_by_season%3Acurrent%2Cgear'
-    return await rioApi.get(`${defaultParams}${name}&${extraInfoParams}`)
+  async getRaiderioInfo(name: string): Promise<any>{
+    try {
+      const defaultParams = '?region=us&realm=azralon&name='
+      const extraInfoParams = '&fields=raid_progression%2Cmythic_plus_scores_by_season%3Acurrent%2Cgear'
+      return await rioApi.get(`${defaultParams}${name}&${extraInfoParams}`)
+      
+    } catch (error) {
+      console.log(error.message)
+      return
+    }
   }
 
   async adminAuth(data: AdminAuthProps){

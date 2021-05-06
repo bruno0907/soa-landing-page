@@ -20,6 +20,7 @@ export const Container = styled.li`
   &:hover{
     filter: brightness(110%)
   }
+
 `
 
 export const Card = styled.article<ApplyStatus>`
@@ -28,7 +29,8 @@ export const Card = styled.article<ApplyStatus>`
   padding: 12px;
   background-color: var(--color-box-background);
   color: var(--color-text-primary);   
-  border-left: solid 5px;
+  border-left: solid 5px;  
+  cursor: pointer;
 
   ${({ applyStatus }) => applyStatus === 'pending' && css`
     border-color: var(--color-primary);

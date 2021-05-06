@@ -5,11 +5,12 @@ interface MenuProps{
 }
 
 export const Container = styled.div`  
-  width: 100%;  
+  min-width: 100%; 
+  min-height: 70vh;   
   display: flex;  
   flex-direction: column;
   align-items: center;
-  justify-content: center;  
+  justify-content: center;    
 
   hr{
     width: 100%;    
@@ -199,14 +200,6 @@ export const Header = styled.header`
       margin-top: 16px;
     }
   }
-`
-
-export const Main = styled.main`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column; 
-  
 `
 
 export const ApplyList = styled.ul`  

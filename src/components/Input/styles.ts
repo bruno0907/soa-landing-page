@@ -14,7 +14,7 @@ export const InputField = styled.input`
   padding: 16px 21px;    
   margin-top: 8px;
   border: solid 2px var(--color-background);
-  border-radius: 12px;  
+  border-radius: 8px;  
   background: var(--color-background);
   font-size: 16px;
   font-weight: 400;
@@ -55,7 +55,7 @@ export const ToggleVisibilityButton = styled.button`
   background: transparent;
   width: 62px;
   height: 52px;
-  border-radius: 12px;
+  border-radius: 8px;
   cursor: pointer;
 
     svg{

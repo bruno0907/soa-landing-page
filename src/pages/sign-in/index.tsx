@@ -1,11 +1,13 @@
-import jwt_decode from 'jwt-decode'
+import { FormEvent, useState, useEffect } from 'react';
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 
-import React, { FormEvent, useState, useEffect } from 'react';
-import Loader from 'react-loader-spinner';
-import { useHistory, Link } from 'react-router-dom'
+import jwt_decode from 'jwt-decode'
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
+
+import Loader from 'react-loader-spinner';
 
 import api from '../../services/api';
 
@@ -16,18 +18,18 @@ interface UserAuthProps{
   password: string;
 }
 
-const SignIn: React.FC = () => {
-  const history = useHistory()
+function SignIn(){
+  const router = useRouter()
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [rememberMe, setRememberMe] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [loginError, setLoginError] = useState(false)
-
-  const isUserRemembered = localStorage.getItem('@SoA-Admin:RememberMe')
-
+  
   useEffect(() => {
+    const isUserRemembered = localStorage.getItem('@SoA-Admin:RememberMe')
+
     if(isUserRemembered === 'true'){
       setRememberMe(true)
 
@@ -48,7 +50,7 @@ const SignIn: React.FC = () => {
       setIsLoading(false)  
     }
     
-  }, [loginError, isUserRemembered])
+  }, [loginError])
 
   const handleValidation = !Boolean(username.length > 0 && password.length > 0)    
 
@@ -73,7 +75,7 @@ const SignIn: React.FC = () => {
       }
       localStorage.setItem('@SoA-Admin:Token', token)
       setIsLoading(false)
-      history.push('/dashboard')  
+      router.push('/dashboard')  
           
     })
     .catch(error => {      
@@ -127,10 +129,10 @@ const SignIn: React.FC = () => {
                 <span></span>
                 <label htmlFor="remember">Lembrar-me</label>
               </div>
-              <Link to ="/forgot-password">Esqueci minha senha!</Link>
+              <Link href ="/forgot-password">Esqueci minha senha!</Link>
             </Remember>
             <Button type="submit" disabled={handleValidation}>Entrar</Button>
-            <Link to="/">Voltar</Link>
+            <Link href="/">Voltar</Link>
           </Form>
       }
     </Container>

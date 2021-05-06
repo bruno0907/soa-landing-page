@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const Header = styled.nav`
   width: 100%;  
-  max-width: 1400px;
+  max-width: 1200px;
   display: flex;
   align-items: center;
   justify-content: space-between;  
@@ -21,7 +21,7 @@ export const Header = styled.nav`
   button{
     padding: 16px 32px;
     border: none;
-    border-radius: 12px;
+    border-radius: 8px;
     background: var(--color-primary);
     color: var(--color-text-primary);
     font-weight: 500;

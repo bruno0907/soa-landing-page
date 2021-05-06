@@ -1,16 +1,16 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`  
-  flex: 1;
-  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;  
+  justify-content: center;  
 `;
 
 export const Content = styled.main`  
   flex: 1;
+  max-width: 1400px;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;

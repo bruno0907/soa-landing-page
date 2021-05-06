@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/router'
 
 import { FiArrowLeft, FiCheck, FiX } from "react-icons/fi";
 
@@ -22,8 +23,8 @@ import { Container,
   ReOpenButton,
   DeleteApplyButton,
 } from './styles';
-import api from '../../services/api';
 
+import api from '../../services/api';
 
 interface ApplyProps{
   id: string;
@@ -36,60 +37,61 @@ interface ApplyProps{
   approvalStatus: string;
 }
 
-const Apply: React.FC<ApplyProps> = () => {
-  const { id } = useParams<ApplyProps>()  
-  const history = useHistory()
+const Apply = () => {
+  const router = useRouter()
+  const {_id: id} = router.query
+
   const [applyInfo, setApplyInfo] = useState<ApplyProps>()
   const [playerInfo, setPlayerInfo] = useState<any>()
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    setLoading(true)
-    const getApplyData = (async() => {
-      const response = await api.getApply(id)
-      if(!response){
+    const getSiteApply = async () => {
+      const { data } = await api.getApply(id)
+      const [charName,] = data.apply.charName.split(/[^a-zA-Z/g]/)
+
+      const apply = {
+        ...data.apply,
+        charName
+      }
+      setApplyInfo(apply)
+    }
+    getSiteApply()    
+
+    return () => setLoading(true)
+
+  }, [id, router])   
+
+  useEffect(() => {
+    if(!applyInfo) return 
+
+    const getRaiderIoInfo = async() => {
+      const response = await api.getRaiderioInfo(applyInfo.charName)
+      if(!response) {
         setLoading(false)
         return
       }
 
-      const { data } = response     
-      const { apply } = data
-      setApplyInfo(apply)  
-      return 
-    })
-    getApplyData()  
-
-    const playerName = applyInfo?.charName
-  
-    const getRaiderIoInfo = async(playerName: string) => {      
-      const response = await api.getRaiderioInfo(playerName)      
-      if(!response){
-        setLoading(false)
-        return
-      }      
-  
-      const { data } = response  
+      const { data } = response
       
       setPlayerInfo(data)
+      setLoading(false)
     }    
+    getRaiderIoInfo()
     
-    if(!playerName) return  
-    getRaiderIoInfo(playerName)
-    setLoading(false)
-
-  }, [id, applyInfo?.charName])
+  }, [applyInfo])
 
   const handleApplyStatus = (status: string) =>{
     setLoading(true)
     api.applyStatusHandle(id, status)
-      .then(() => history.push('/dashboard'))
+      .then(() => router.push('/dashboard'))
       .catch(error => console.log(error.message))
   }
 
   const handleRemoveApply = () =>{
     setLoading(true)
     api.applyRemove(id)
-      .then(() => history.push('/dashboard'))
+      .then(() => router.push('/dashboard'))
       .catch(error => console.log(error.message))
   }
 
@@ -104,7 +106,7 @@ const Apply: React.FC<ApplyProps> = () => {
           />    
         : <>            
             <Header status={applyInfo?.approvalStatus || ''}>
-              <Link to="/dashboard">
+              <Link href="/dashboard">
                 <button><FiArrowLeft size={24} /></button>
               </Link>
               <h1>Apply {applyInfo?.charName}</h1>

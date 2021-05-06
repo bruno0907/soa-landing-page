@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
-import { useHistory, Link } from 'react-router-dom';
+import { useRouter } from 'next/router'
 
 import { FiPower, FiCheck, FiAlertTriangle, FiX, FiList, FiMenu } from 'react-icons/fi';
 
@@ -8,16 +8,14 @@ import ApplyCard from '../../components/ApplyCard';
 
 import Loader from 'react-loader-spinner';
 
-import avatar_placeholder from '../../assets/images/avatar_placeholder.png'
-
 import api from '../../services/api'
 
-import { ApplyList, 
+import { 
+  ApplyList, 
   Container, 
   MenuBar, 
   Content, 
-  Header, 
-  Main,
+  Header,   
   MenuButton, 
 } from './styles';
 
@@ -32,14 +30,14 @@ interface ApplyProps{
   approvalStatus: string;
 }
 
-const Dashboard: React.FC = () => {
-  const history = useHistory()  
+function Dashboard(){  
+  const router = useRouter()
   const [applies, setApplies] = useState<ApplyProps[]>()    
   const [appliesCount, setAppliesCount] = useState<ApplyProps[]>()  
   const [menuVisibility, setMenuVisibility] = useState(false)
   
-  const token = localStorage.getItem('@SoA-Admin:Token')
-  !token && history.push('/')  
+  // const token = localStorage.getItem('@SoA-Admin:Token')
+  // !token && router.push('/')  
 
   const getApplies = useCallback(async(approvalStatus?: string) => {
     if(approvalStatus){
@@ -67,12 +65,12 @@ const Dashboard: React.FC = () => {
   const newAppliesCounter = appliesCount?.filter(apply => apply.approvalStatus === 'pending').length || 0
 
   const logout = () => {
-    const rememberMe = localStorage.getItem('@SoA-Admin:RememberMe')
+    // const rememberMe = localStorage.getItem('@SoA-Admin:RememberMe')
 
-    if(!rememberMe){
-      localStorage.removeItem('@SoA-Admin:Token')
-    }
-    return history.push('/')
+    // if(!rememberMe){
+    //   localStorage.removeItem('@SoA-Admin:Token')
+    // }
+    return router.push('/')
   }
 
   const handleMenu = () => setMenuVisibility(!menuVisibility)
@@ -86,10 +84,7 @@ const Dashboard: React.FC = () => {
           <FiX size={24} />
         }
       </MenuButton>    
-      <MenuBar isOpen={menuVisibility}>        
-        <Link to="/">
-          <img src={avatar_placeholder} alt="" />
-        </Link>        
+      <MenuBar isOpen={menuVisibility}>  
         <div>
           <button onClick={() => getApplies('pending')}>
             <FiAlertTriangle size={24}/>
@@ -122,27 +117,25 @@ const Dashboard: React.FC = () => {
           }
         </Header>
         <hr/>
-        <Main>
-          { !applies ? 
+        <Container>
+          { !applies ?    
             <Container>
               <Loader
                 type="ThreeDots"
-                color="#009ae4"
+                color="#436490"
                 height={100}
                 width={100}      
-              />
-            </Container>
+              />            
+            </Container>       
             :                
             <ApplyList>
-                <>
-                { applies.length <= 0 ? <Container>Nenhum apply encontrado</Container> :
-                applies.map((apply: ApplyProps) =>                 
-                  <ApplyCard key={apply._id} apply={apply}/>  
-                )}
-                </>
+              { applies.length <= 0 ? <Container>Nenhum apply encontrado</Container> :
+              applies.map((apply: ApplyProps) =>                 
+                <ApplyCard key={apply._id} apply={apply}/>  
+              )}
             </ApplyList>  
           }
-        </Main>
+        </Container>
       </Content>      
     </Container>
   );

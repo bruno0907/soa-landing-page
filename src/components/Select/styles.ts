@@ -22,7 +22,7 @@ export const Container = styled.div<SelectProps>`
     align-items: flex-start;
     justify-content: center;
     border: solid 2px var(--color-background);
-    border-radius: 12px;  
+    border-radius: 8px;  
     background: var(--color-background);
     font-size: 16px;
     font-weight: 400;

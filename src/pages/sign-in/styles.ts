@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  width: 100%;
-  flex: 1;
+  width: 100vw;
+  height: 100vh;  
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -19,7 +19,7 @@ export const Container = styled.div`
   a{    
     color: var(--color-text-secondary);
     font-size: .9rem;
-    line-height: 145%;
+    line-height: 145%;    
     transition: filter .1s;    
 
       &:hover{
@@ -55,6 +55,9 @@ export const Form = styled.form`
     }
   } 
 
+  button{
+    margin-bottom: 24px;
+  }
 `
 
 export const Remember = styled.div`
@@ -62,8 +65,8 @@ export const Remember = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 12px;
-  transition: filter .1s;
+  margin: 24px 0 42px;
+  transition: filter .1s;  
 
   div{
     position: relative;
