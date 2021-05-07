@@ -47,7 +47,6 @@ export default function ApplyForm(){
   const [applyFormStatus, setApplyFormStatus] = useState(applyFormState.pending)
   const [formStep, setFormStep] = useState(0)
   const [loading, setLoading] = useState(true)
-  
   const [state, setState] = useState(initialData)
 
   useEffect(() => {
@@ -55,9 +54,7 @@ export default function ApplyForm(){
     if(!data) setLoading(true)
 
     setClasses(data)
-    setLoading(false)
-
-    console.log(data)
+    setLoading(false)    
 
   }, [error, data])
 
