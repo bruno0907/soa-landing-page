@@ -70,37 +70,6 @@ export const FormSection = styled.div`
     margin-bottom: 36px;
   }
 
-  ul{
-    width: inherit;    
-    padding: 24px;
-    list-style: none;    
-
-    li{
-      width: inherit;
-      line-height: 145%;  
-      color: var(--color-text-secondary);
-      margin-bottom: 12px;
-
-      span{
-        display: block;        
-        margin-top: 2px;
-        padding: 8px;
-        border: solid 2px var(--color-primary);
-        border-radius: 4px;
-        background: var(--color-background);
-        color: var(--color-text-primary);
-        width: 100%;
-        cursor: unset;
-        word-wrap: break-word;
-        
-        :hover{
-          text-decoration: unset;
-          filter: unset;
-        }
-      }    
-    }
-  }
-
   button{
     margin-top: 36px;
   }

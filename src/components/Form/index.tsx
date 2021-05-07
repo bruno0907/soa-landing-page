@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, FormEvent, ChangeEvent } from 'react'
+import useSWR from 'swr'
 
 import { GoCheck, GoX, GoAlert } from 'react-icons/go'
 
@@ -14,38 +15,51 @@ import {
   FormSection,   
   FormFallback, 
 } from './styles'
-import api from '../../services/api'
+import axios from 'axios'
 
-interface ClassesProps{  
+interface ClassesProps{   
   _id: string;
   className: string;
-  specializations: Array<[]>    
+  specializations: string[];  
 }
 
 const applyFormState = {
-  pending: 'PENDING',
+  pending: 'OK',
   success: 'SUCCESS',
   error: 'ERROR',
   maintenance: 'MAINTENANCE'
 }
 
-export default function ApplyForm(){      
-  const [classesList, setClassesList] = useState<ClassesProps[]>([])
-  const [classSpecs, setClassSpecs] = useState<Array<unknown>>([])   
+const initialData = {
+  battleTag: '',
+  charName: '', 
+  className: '',
+  mainSpec: '',
+  offSpec: '',
+  about: '',  
+}
 
+export default function ApplyForm(){   
+  const { error, data } = useSWR('/api/classes')
+  
+  const [classes, setClasses] = useState<ClassesProps[]>([])
+  const [classSpecs, setClassSpecs] = useState<unknown[]>([])   
   const [applyFormStatus, setApplyFormStatus] = useState(applyFormState.pending)
-  const [formStep, setFormStep] = useState(1)
+  const [formStep, setFormStep] = useState(0)
+  const [loading, setLoading] = useState(true)
+  
+  const [state, setState] = useState(initialData)
 
-  const [loading, setLoading] = useState(true)    
+  useEffect(() => {
+    if(error) setApplyFormStatus(applyFormState.maintenance)
+    if(!data) setLoading(true)
 
-  const [state, setState] = useState({
-    battleTag: '',
-    charName: '', 
-    className: '',
-    mainSpec: '',
-    offSpec: '',
-    about: '',
-  })
+    setClasses(data)
+    setLoading(false)
+
+    console.log(data)
+
+  }, [error, data])
 
   const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { value } = event.target
@@ -67,33 +81,13 @@ export default function ApplyForm(){
     })
        
     fetchClassSpecs(value)         
-  }
-
-  useEffect(() => {        
-    api.getClasses()
-      .then(({ data }) => {
-        if(!data) throw new Error('No response from the server.')
-        const { classes } = data
-
-        if(!classes) throw new Error('Error fetching classes')
-                   
-        setClassesList(classes)
-        setLoading(false)
-        return
-      })
-      .catch(() => {
-        setApplyFormStatus(applyFormState.maintenance)
-        setLoading(false)
-        return
-      })
-
-  }, [])
+  }  
   
   const fetchClassSpecs = useCallback((classChosen) => {       
-    const selectedClass = classesList.filter(option => option.className === classChosen)
+    const selectedClass = classes.filter(option => option.className === classChosen)
     setClassSpecs(selectedClass[0].specializations)
     
-  }, [classesList])  
+  }, [classes])  
 
   const validateSubmit = !Boolean(
     state.battleTag.length > 0 &&
@@ -102,20 +96,23 @@ export default function ApplyForm(){
     state.mainSpec.length > 0
   ) 
 
+  const initialFormStep = 0
+  const finalFormStep = 4
   const formTimeout = 500
 
   const handleFormNextStep = () => {    
     setLoading(true)
     setTimeout(() => {
-      formStep < 5 && setFormStep(formStep => formStep + 1)
+      formStep < finalFormStep && setFormStep(formStep => formStep + 1)
       setLoading(false)
     }, formTimeout)    
   }
 
+
   const handleFormPreviousStep = () => {    
     setLoading(true)
     setTimeout(() => {
-      formStep > 1 && setFormStep(formStep => formStep - 1)      
+      formStep > initialFormStep && setFormStep(formStep => formStep - 1)      
       setLoading(false)
     }, formTimeout) 
   }
@@ -134,54 +131,35 @@ export default function ApplyForm(){
       about: state.about
     }
 
-    try {      
-      const response = await api.newApply(data)          
-      if(!response){
-        throw new Error('Um erro ocorreu ao concluir seu apply.')
-      }      
-      setApplyFormStatus(applyFormState.success)
-      setLoading(false)      
-      return  
-
-    } catch (error) {
-      setApplyFormStatus(applyFormState.error)      
-      setLoading(false)
-      return
-
-    }    
+    await axios.post('/api/apply', data)
+      .then(() => {
+        setApplyFormStatus(applyFormState.success)
+        setLoading(false)
+      })
+      .catch(() => {
+        setApplyFormStatus(applyFormState.error)
+        setLoading(false)
+      })    
   }
 
   const handleFormReset = (event: FormEvent) => {
     event.preventDefault()
-
-    setState({
-      battleTag: '',
-      charName: '', 
-      className: '',
-      mainSpec: '',
-      offSpec: '',
-      about: '',
-    })
+    
+    setFormStep(initialFormStep)
     setApplyFormStatus(applyFormState.pending)
-
   }
 
   return(  
-    <Form onSubmit={handleSubmit}> 
-      { loading ? 
-        <Loader
-          type="ThreeDots"
-          color="#009ae4"
-          height={100}
-          width={100}      
-        />  
-        :   
-        <>        
-
-        { applyFormStatus === 'PENDING' && (
+    <Form 
+      onSubmit={handleSubmit} 
+      onKeyPress={event => event.key === 'Enter' && event.preventDefault()}
+    > 
+      { loading 
+        ? <Loader type="ThreeDots" color="#009ae4" height={100} width={100}  />  
+        : <> { applyFormStatus === 'OK' && (
           <>
             <h2>Formulário de Apply</h2>
-            { formStep === 1 &&     
+            { formStep === 0 &&     
                 <FormSection>
                   <h3>Battle Tag</h3>
                   <p>Por favor nos informe a sua battle tag. Será por ela que faremos contato contigo.</p>
@@ -199,14 +177,14 @@ export default function ApplyForm(){
                 </FormSection>
             } 
 
-            { formStep === 2 &&            
+            { formStep === 1 &&            
               <FormSection>
                 <h3>Nome do personagem</h3>
                 <p>Informe apenas o nome do seu personagem. Não há necessidade de informar o servidor.</p>
                 <Input 
                   label="Nome do Personagem"
                   name="charName"          
-                  value={state.charName.replace(/[^a-zA-Z]/g, '')}
+                  value={state.charName.replace(/[-#\d]/, '')}
                   onChange={handleChange}                
                 />  
                 <Button 
@@ -218,7 +196,7 @@ export default function ApplyForm(){
               </FormSection>            
             }
 
-            { formStep === 3 &&
+            { formStep === 2 &&
               <FormSection>
                 <h3>Classe, spec e off-spec</h3>
                 <p>Escolha a sua classe, spec e se possuir uma off-spec</p>
@@ -227,7 +205,7 @@ export default function ApplyForm(){
                   name="class"
                   value={state.className}                  
                   >                  
-                  { classesList.map(gameClass => 
+                  { classes.map(gameClass => 
                     <li 
                     key={gameClass._id} 
                     onClick={() => handleClassChange(gameClass.className)}
@@ -275,7 +253,7 @@ export default function ApplyForm(){
               </FormSection>
             }
 
-            { formStep === 4 &&
+            { formStep === 3 &&
               <FormSection>
                 <h3>Informações adicionais</h3>
                 <p>Use este espaço para nos informar sobre você queira. Logs, armory ou Raider.io não são precisos.</p>
@@ -290,12 +268,12 @@ export default function ApplyForm(){
               </FormSection>
             }
 
-            { formStep === 5 &&
+            { formStep === 4 &&
               <FormSection>
                 <h3>Revise suas informações</h3>
                 <p>Confira se os dados informados estão corretos antes de enviar o seu apply.</p>
                 
-                <Input label="Battle-tag" name="" value={state.battleTag} disabled/>
+                <Input label="Battle Tag" name="" value={state.battleTag} disabled/>
                 <Input label="Personagem" name="" value={state.charName} disabled/>
                 <Input label="Classe" name="" value={state.className} disabled/>
                 <Input label="Main Spec" name="" value={state.mainSpec} disabled/>
@@ -348,8 +326,6 @@ export default function ApplyForm(){
 
       </>
       }
-    </Form>
-      
-  )
-  
+    </Form>      
+  )  
 }
