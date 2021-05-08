@@ -32,14 +32,15 @@ function Dashboard(){
 
   const [applies, setApplies] = useState<ApplyProps[]>()      
   const [menuVisibility, setMenuVisibility] = useState(false)
-
-  const appliesCount = data.length || 0
+  const [newAppliesCounter, setNewAppliesCounter] = useState(0)
   
   useEffect(() => {
     if(error) return
     if(!data) return
     
     setApplies(data)
+    setNewAppliesCounter(data.length)
+    
   }, [data, error])  
 
   const getApplies = useCallback(async(approvalStatus?: string) => {
@@ -105,9 +106,9 @@ function Dashboard(){
       <Content>
         <Header>
           <h1>Sons of Aiur Applies</h1>
-          { appliesCount === 0 
+          { newAppliesCounter === 0 
             ? <span>Nenhum apply no momento</span> 
-            : <span>Você possui <strong>{appliesCount}</strong> {appliesCount > 1 ? 'novos applies' : 'novo apply'}</span>
+            : <span>Você possui <strong>{newAppliesCounter}</strong> {newAppliesCounter > 1 ? 'novos applies' : 'novo apply'}</span>
           } 
         </Header>
         <hr/>

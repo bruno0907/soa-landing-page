@@ -1,87 +1,118 @@
-import { FormEvent, useState, useEffect } from 'react';
+import { FormEvent, useState, useEffect,  } from 'react';
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-
-import jwt_decode from 'jwt-decode'
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 
-import Loader from 'react-loader-spinner';
+import Loader from '../../components/Loader';
 
 import api from '../../services/api';
 
 import { Container, ErrorBox, Form, Remember } from '../../styles/sign-in'
+import { ChangeEvent } from 'react';
+import axios from 'axios';
 
 interface UserAuthProps{
   username: string;
-  password: string;
+  password: string;  
+}
+
+const initialState = {
+  username: '',
+  password: '',  
 }
 
 function SignIn(){
   const router = useRouter()
 
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const [state, setState] = useState<UserAuthProps>(initialState)
   const [rememberMe, setRememberMe] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [loginError, setLoginError] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [loginError, setLoginError] = useState({
+    state: false,
+    error: ''
+  })  
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { value } = event.target
+    const { name } = event.target
+
+    setState({
+      ...state,      
+      [name]: value
+    })
+
+  }
   
-  useEffect(() => {
+  useEffect(() => {    
     const isUserRemembered = localStorage.getItem('@SoA-Admin:RememberMe')
 
     if(isUserRemembered === 'true'){
-      setRememberMe(true)
-
-      const token = localStorage.getItem('@SoA-Admin:Token')
+      setTimeout(() => {
+        router.push('/dashboard')
+      }, 500)
       
-      const decodedJwt = jwt_decode(token!)
-      const { username, password } = decodedJwt as UserAuthProps
+    } else {
+      setIsLoading(prevState => !prevState)
+      
+    }    
 
-      setUsername(username)  
-      setPassword(password) 
-      return       
-    }
-
-    if(loginError === true){
-      setUsername('')      
-      setPassword('')  
-      setRememberMe(false) 
-      setIsLoading(false)  
-    }
+    return () => setIsLoading(prevState => !prevState)
     
-  }, [loginError])
+  }, [router])
 
-  const handleValidation = !Boolean(username.length > 0 && password.length > 0)    
+  const handleValidation = !Boolean(state.username.length > 0 && state.password.length > 0)    
 
-  const handleSubmit = (event: FormEvent) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault()
 
-    setIsLoading(true)
+    setIsLoading(prevState => !prevState)
 
     const data = {
-      username,
-      password
+      username: state.username,
+      password: state.password
     }
 
-    api.adminAuth(data)
-    .then(response => {
-      const { data } = response
-      const { token } = data
-
+    await axios.post('/api/auth', data).then(() => {
       if(rememberMe === true){
         localStorage.clear()        
         localStorage.setItem('@SoA-Admin:RememberMe', JSON.stringify(rememberMe))
-      }
-      localStorage.setItem('@SoA-Admin:Token', token)
-      setIsLoading(false)
-      router.push('/dashboard')  
+      }  
+      router.push('/dashboard')
+      
+    }).catch(() => {      
+      localStorage.clear()      
+      setState({
+        ...state,
+        password: '',        
+      })  
+      setLoginError({
+        state: true,
+        error: 'Nome de usuário ou senha inválidos'
+      })       
+      setIsLoading(prevState => !prevState)   
+      
+    })
+
+    // api.adminAuth(data)
+    // .then(() => {      
+    //   if(rememberMe === true){
+    //     localStorage.clear()        
+    //     localStorage.setItem('@SoA-Admin:RememberMe', JSON.stringify(rememberMe))
+    //   }    
+    //   router.push('/dashboard')  
           
-    })
-    .catch(() => {      
-      setIsLoading(false)   
-      setLoginError(true)          
-    })
+    // })
+    // .catch(() => {
+    //   localStorage.clear()      
+    //   setState({
+    //     ...state,
+    //     password: '',        
+    //   })  
+    //   setLoginError(true)       
+    //   setIsLoading(prevState => !prevState)   
+    // })
     
   }
   
@@ -90,44 +121,42 @@ function SignIn(){
       <h1>SONS OF AIUR</h1> 
       <h3>Área restrita</h3>
       { isLoading 
-        ? <Loader
-            type="ThreeDots"
-            color="#009ae4"
-            height={100}
-            width={100}      
-          /> 
+        ? <Loader /> 
         : <Form onSubmit={handleSubmit}>        
             <legend>Faça seu login</legend>
             <fieldset>
               <Input 
                 label="Usuário"
                 name="username"
-                value={username}              
-                onChange={event => setUsername(event.target.value)}
-                onKeyUp={() => loginError &&setLoginError(false)}
+                value={state.username}              
+                onChange={handleChange}
+                onKeyUp={() => loginError &&setLoginError({
+                  state: false,
+                  error: ''
+                })}
               />
               <Input 
-                type="password"
                 label="Senha"
+                type="password"
                 name="password"
-                value={password}
-                onChange={event => setPassword(event.target.value)}
+                value={state.password}
+                onChange={handleChange}
               />
             </fieldset>
-            { loginError &&
-              <ErrorBox>Usuário ou senha inválidos! Tente novamente.</ErrorBox>
+            { loginError.state === true &&
+              <ErrorBox>{loginError.error}</ErrorBox>
             }
             <Remember>
               <div>            
                 <input 
-                  id="remember"
+                  id="rememberMe"
                   type="checkbox" 
-                  name="remember" 
+                  name="rememberMe" 
                   checked={rememberMe}
-                  onChange={event => setRememberMe(event.target.checked)}
+                  onChange={() => setRememberMe(prevState => !prevState)}
                 />            
                 <span></span>
-                <label htmlFor="remember">Lembrar-me</label>
+                <label htmlFor="rememberMe">Lembrar-me</label>
               </div>
               <Link href ="/forgot-password">Esqueci minha senha!</Link>
             </Remember>
