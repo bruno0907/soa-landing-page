@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components';
 
-export const Container = styled.button`  
-  width: 100%;  
-  padding: 16px 21px;  
+export const Container = styled.button`    
+  width: 100%;
+  padding: 16px 48px;  
   border: none;
   border-radius: 8px; 
   background: var(--color-primary);

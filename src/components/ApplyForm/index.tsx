@@ -201,7 +201,7 @@ export default function ApplyForm(){
                   )}
                 </Select> }
                 <Button 
-                  label="Voltar"
+                  label="Próximo"
                   type="button" 
                   onClick={handleFormNextStep} 
                   disabled={!Boolean(state.className !== '' && state.mainSpec !== '')}
@@ -213,7 +213,7 @@ export default function ApplyForm(){
             { formStep === 4 &&
               <FormSection>
                 <h3>Informações adicionais</h3>
-                <p>Use este espaço para nos informar sobre você queira. Logs, armory ou Raider.io não são precisos.</p>
+                <p>Use este espaço para sua apresentação caso queira. Logs, Armory ou Raider.io não são necessários.</p>
                 <Textarea
                   label="Informações adicionais"
                   name="about"          

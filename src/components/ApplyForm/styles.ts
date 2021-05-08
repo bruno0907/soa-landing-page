@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 export const Form = styled.form`
-  width: 550px;   
-  min-height: 575px; 
+  width: 100%;     
+  margin-left: 12px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -11,15 +11,9 @@ export const Form = styled.form`
   padding: 48px;  
   border-radius: 8px;    
 
-  @media(max-width: 1020px){    
-    width: 100%;
-    margin-left: 0;
-    margin-top: 48px;
-  }
+  @media(max-width: 1024px) { margin-left: 0; }
 
-  div + div {
-    margin-top: 12px;
-  }
+  div + div { margin-top: 12px; }
 
   h2{    
     text-align: center;    
@@ -31,21 +25,15 @@ export const Form = styled.form`
   @media(max-width: 550px){
     padding: 22px;
 
-    h2{
-      font-size: 1.2rem;
-    }
+    h2{ font-size: 1.2rem; }
   }
 
   @keyframes fadeInOpacity {
-    0% {
-      opacity: 0;
-    }
-    50%{
-      opacity: .5;
-    }
-    100% {
-      opacity: 1;
-    }
+    0% { opacity: 0; }
+    25% { opacity: .25}
+    50%{  opacity: .5; }
+    75% { opacity: .75; }
+    100% { opacity: 1; }
   }
 ` 
 
@@ -70,9 +58,7 @@ export const FormSection = styled.div`
     margin-bottom: 36px;
   }
 
-  button{
-    margin-top: 36px;
-  }
+  button{ margin-top: 36px; }
 
   span{
     font-size: 1rem;
@@ -117,17 +103,11 @@ export const FormFallback = styled.div`
     
     transition: filter .1s;
 
-    img{      
-      height: 80px;      
-    }
+    img{ height: 80px; }
 
-    &:hover{
-      filter: brightness(150%);
-    }    
+    &:hover{ filter: brightness(150%); }    
   }
 
-  button{
-    margin-top: 24px;
-  }
+  button{ margin-top: 24px; }
 
 ` 

@@ -1,30 +1,35 @@
 import styled from 'styled-components';
 
 export const Container = styled.aside`  
-  width: 45%;
+  width: 100%;
+  margin-top: 48px;  
+  margin-right: 24px;    
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  margin-right: 24px;
 
-    @media(max-width: 1020px){
+    @media(max-width: 1024px){
       width: 100%;
-      align-items: center;     
       margin-right: 0;
-      margin-top: 24px;
+      margin-bottom: 48px;
     }
 
     h1{
       text-align: center;      
       color: var(--color-text-primary);
-      margin-bottom: 21px;
+      margin-bottom: 48px;
     }
 
     p{
       color: var(--color-text-secondary);
-      line-height: 150%;
-      margin-bottom: 21px;
+      line-height: 150%;      
+      margin-bottom: 8px;
+    }
+
+    h3{
+      margin-top: 8px;
+      margin-bottom: 24px;
     }
 
 `;

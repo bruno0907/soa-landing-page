@@ -7,8 +7,6 @@ import Button from '../../components/Button';
 
 import Loader from '../../components/Loader';
 
-import api from '../../services/api';
-
 import { Container, ErrorBox, Form, Remember } from '../../styles/sign-in'
 import { ChangeEvent } from 'react';
 import axios from 'axios';
@@ -94,25 +92,6 @@ function SignIn(){
       setIsLoading(prevState => !prevState)   
       
     })
-
-    // api.adminAuth(data)
-    // .then(() => {      
-    //   if(rememberMe === true){
-    //     localStorage.clear()        
-    //     localStorage.setItem('@SoA-Admin:RememberMe', JSON.stringify(rememberMe))
-    //   }    
-    //   router.push('/dashboard')  
-          
-    // })
-    // .catch(() => {
-    //   localStorage.clear()      
-    //   setState({
-    //     ...state,
-    //     password: '',        
-    //   })  
-    //   setLoginError(true)       
-    //   setIsLoading(prevState => !prevState)   
-    // })
     
   }
   
@@ -160,7 +139,7 @@ function SignIn(){
               </div>
               <Link href ="/forgot-password">Esqueci minha senha!</Link>
             </Remember>
-            <Button type="submit" disabled={handleValidation}>Entrar</Button>
+            <Button label="Entrar" type="submit" disabled={handleValidation} />
             <Link href="/">Voltar</Link>
           </Form>
       }

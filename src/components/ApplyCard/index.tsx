@@ -8,7 +8,7 @@ import {
   CardBody 
 } from './styles'
 
-import api from '../../services/api';
+import { getRaiderIoInfo } from '../../services/getRaiderIoService'
 
 interface ApplyProps{
   apply: {    
@@ -35,15 +35,17 @@ const ApplyCard = ({ apply }: ApplyProps) => {
   const [playerName,] = apply.charName.split(/(-|#)/)
 
   useEffect(() => {
-    api.getRaiderioInfo(playerName) 
-    .then(({ data }) => {  
-      setRaiderioInfo(data)
-      setIlvl(data.gear.item_level_equipped)      
+    getRaiderIoInfo(playerName) 
+    .then(response => {        
+      if(response.statusCode === 400) return
+      
+      setRaiderioInfo(response)
+      setIlvl(response.gear.item_level_equipped)      
       setProgression({
-        Heroic: data.raid_progression["castle-nathria"].heroic_bosses_killed,
-        Mythic: data.raid_progression["castle-nathria"].mythic_bosses_killed
+        Heroic: response.raid_progression["castle-nathria"].heroic_bosses_killed,
+        Mythic: response.raid_progression["castle-nathria"].mythic_bosses_killed
       })
-      setIo(data.mythic_plus_scores_by_season[0].scores.all)
+      setIo(response.mythic_plus_scores_by_season[0].scores.all)
     })
     .catch(error => console.log(error))
 
