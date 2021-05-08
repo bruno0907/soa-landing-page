@@ -1,11 +1,8 @@
 import { useState, ChangeEvent } from "react"
-import useLoader from "./useLoader"
 
 export default function useForm(initialState: any){
   const [state, setState] = useState(initialState)
-  const [formStep, setFormStep] = useState(1)
-
-  const { setIsLoading } = useLoader(true)
+  const [formStep, setFormStep] = useState(1)  
 
   const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target
