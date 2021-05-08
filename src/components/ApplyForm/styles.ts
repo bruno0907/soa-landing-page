@@ -103,10 +103,11 @@ export const FormFallback = styled.div`
   }
 
   p{
+    width: 100%;
     margin-top: 24px;
     color: var(--color-text-secondary);
     font-size: 1rem;
-    text-align: center;
+    text-align: left;
   }
 
   a{
@@ -117,12 +118,16 @@ export const FormFallback = styled.div`
     transition: filter .1s;
 
     img{      
-      height: 80px;
+      height: 80px;      
     }
 
     &:hover{
       filter: brightness(150%);
     }    
+  }
+
+  button{
+    margin-top: 24px;
   }
 
 ` 

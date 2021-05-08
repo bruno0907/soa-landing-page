@@ -1,14 +1,15 @@
-import { useState, useEffect, useCallback, FormEvent, ChangeEvent } from 'react'
+import { useState, useEffect, useCallback, FormEvent } from 'react'
 import useSWR from 'swr'
 
-import { GoCheck, GoX, GoAlert } from 'react-icons/go'
+import useLoader from '../../hooks/useLoader'
+import useForm from '../../hooks/useForm'
 
 import Input from '../Input'
 import Select from '../Select'
 import Textarea from '../Textarea'
 import Button from '../Button'
 
-import Loader from 'react-loader-spinner'
+import { GoCheck, GoX, GoAlert } from 'react-icons/go'
 
 import { 
   Form, 
@@ -24,50 +25,41 @@ interface ClassesProps{
 }
 
 const applyFormState = {
-  pending: 'OK',
+  pending: 'PENDING',
   success: 'SUCCESS',
   error: 'ERROR',
   maintenance: 'MAINTENANCE'
 }
 
-const initialData = {
+const initialFormData = {
   battleTag: '',
   charName: '', 
   className: '',
   mainSpec: '',
   offSpec: '',
   about: '',  
+  formSteps: 5
 }
 
 export default function ApplyForm(){   
   const { error, data } = useSWR('/api/classes')
+  const { Loader, isLoading, setIsLoading } = useLoader(true)
+  const { state, setState, handleChange, handleFormPreviousStep, handleFormNextStep, formStep, setFormStep } = useForm(initialFormData)
   
   const [classes, setClasses] = useState<ClassesProps[]>([])
   const [classSpecs, setClassSpecs] = useState<unknown[]>([])   
   const [applyFormStatus, setApplyFormStatus] = useState(applyFormState.pending)
-  const [formStep, setFormStep] = useState(0)
-  const [loading, setLoading] = useState(true)
-  const [state, setState] = useState(initialData)
 
   useEffect(() => {
     if(error) setApplyFormStatus(applyFormState.maintenance)
-    if(!data) setLoading(true)
+    if(!data) return
 
-    setClasses(data)
-    setLoading(false)    
+    if(data){
+      setClasses(data)
+      setIsLoading(false)    
+    }
 
-  }, [error, data])
-
-  const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { value } = event.target
-    const { name } = event.target
-
-    setState({
-      ...state,
-      [name]: value
-    })
-
-  }
+  }, [error, data, setIsLoading])
   
   const handleClassChange = (value: string) => {   
     setState({
@@ -75,7 +67,7 @@ export default function ApplyForm(){
       className: value,
       mainSpec: '',
       offSpec: ''
-    })
+    }) 
        
     fetchClassSpecs(value)         
   }  
@@ -93,31 +85,10 @@ export default function ApplyForm(){
     state.mainSpec.length > 0
   ) 
 
-  const initialFormStep = 0
-  const finalFormStep = 4
-  const formTimeout = 500
-
-  const handleFormNextStep = () => {    
-    setLoading(true)
-    setTimeout(() => {
-      formStep < finalFormStep && setFormStep(formStep => formStep + 1)
-      setLoading(false)
-    }, formTimeout)    
-  }
-
-
-  const handleFormPreviousStep = () => {    
-    setLoading(true)
-    setTimeout(() => {
-      formStep > initialFormStep && setFormStep(formStep => formStep - 1)      
-      setLoading(false)
-    }, formTimeout) 
-  }
-
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault()
     
-    setLoading(true)
+    setIsLoading(true)
 
     const data = {
       battleTag: state.battleTag,
@@ -131,18 +102,18 @@ export default function ApplyForm(){
     await axios.post('/api/newApply', data)
       .then(() => {
         setApplyFormStatus(applyFormState.success)
-        setLoading(false)
+        setIsLoading(false)
       })
       .catch(() => {
         setApplyFormStatus(applyFormState.error)
-        setLoading(false)
-      })    
+        setIsLoading(false)
+      }) 
   }
 
   const handleFormReset = (event: FormEvent) => {
     event.preventDefault()
     
-    setFormStep(initialFormStep)
+    setFormStep(1)
     setApplyFormStatus(applyFormState.pending)
   }
 
@@ -151,12 +122,11 @@ export default function ApplyForm(){
       onSubmit={handleSubmit} 
       onKeyPress={event => event.key === 'Enter' && event.preventDefault()}
     > 
-      { loading 
-        ? <Loader type="ThreeDots" color="#009ae4" height={100} width={100}  />  
-        : <> { applyFormStatus === 'OK' && (
+      { isLoading ? <Loader /> : 
+        <> { applyFormStatus === 'PENDING' && (
           <>
             <h2>Formulário de Apply</h2>
-            { formStep === 0 &&     
+            { formStep === 1 &&     
                 <FormSection>
                   <h3>Battle Tag</h3>
                   <p>Por favor nos informe a sua battle tag. Será por ela que faremos contato contigo.</p>
@@ -167,14 +137,15 @@ export default function ApplyForm(){
                     onChange={handleChange}
                   />
                   <Button 
+                    label="Próximo"
                     type="button" 
                     onClick={handleFormNextStep} 
                     disabled={!Boolean(state.battleTag !== '')}
-                  >Próximo</Button>
+                  />
                 </FormSection>
             } 
 
-            { formStep === 1 &&            
+            { formStep === 2 &&            
               <FormSection>
                 <h3>Nome do personagem</h3>
                 <p>Informe apenas o nome do seu personagem. Não há necessidade de informar o servidor.</p>
@@ -185,28 +156,22 @@ export default function ApplyForm(){
                   onChange={handleChange}                
                 />  
                 <Button 
-                    type="button" 
-                    onClick={handleFormNextStep} 
-                    disabled={!Boolean(state.charName !== '')}
-                  >Próximo</Button>
+                  label="Próximo"
+                  type="button" 
+                  onClick={handleFormNextStep} 
+                  disabled={!Boolean(state.charName !== '')}
+                />
                 <span onClick={handleFormPreviousStep}>Voltar</span>   
               </FormSection>            
             }
 
-            { formStep === 2 &&
+            { formStep === 3 &&
               <FormSection>
                 <h3>Classe, spec e off-spec</h3>
                 <p>Escolha a sua classe, spec e se possuir uma off-spec</p>
-                <Select 
-                  label="Classe"
-                  name="class"
-                  value={state.className}                  
-                  >                  
-                  { classes.map(gameClass => 
-                    <li 
-                    key={gameClass._id} 
-                    onClick={() => handleClassChange(gameClass.className)}
-                    >
+                <Select label="Classe" name="class"value={state.className}>
+                  {classes.map(gameClass => 
+                    <li key={gameClass._id} onClick={() => handleClassChange(gameClass.className)}>
                       {gameClass.className}
                     </li>
                   )}   
@@ -217,40 +182,35 @@ export default function ApplyForm(){
                     name="mainSpec"
                     value={state.mainSpec}
                     onChange={handleChange}                                
-                    >                    
-                    { classSpecs.map((spec: any) => 
-                      <li 
-                      key={spec} 
-                      onClick={() => setState({...state, mainSpec: spec})}
-                      >{spec}</li>
-                      )}
-                  </Select>  
-                }
-                { state.mainSpec.length <= 0 ? null :      
-                <Select 
-                label="Off Spec"
-                name="offSpec"
-                value={state.offSpec}
-                onChange={handleChange}                                  
-                >                  
-                  { classSpecs.map((spec: any) => 
-                    <li 
-                    key={spec} 
-                      onClick={() => setState({...state, offSpec: spec})}
-                    >{spec}</li>
+                  >{classSpecs.map((spec: any) => 
+                      <li key={spec} onClick={() => setState({...state, mainSpec: spec})}>
+                        {spec}
+                      </li>
                     )}
-                </Select> 
-                }
+                  </Select> }
+                { state.mainSpec.length <= 0 ? null :      
+                  <Select 
+                    label="Off Spec"
+                    name="offSpec"
+                    value={state.offSpec}
+                    onChange={handleChange}                                  
+                  >{classSpecs.map((spec: any) => 
+                    <li key={spec} onClick={() => setState({...state, offSpec: spec})}>
+                      {spec}
+                    </li>
+                  )}
+                </Select> }
                 <Button 
-                    type="button" 
-                    onClick={handleFormNextStep} 
-                    disabled={!Boolean(state.className !== '' && state.mainSpec !== '')}
-                  >Próximo</Button>
+                  label="Voltar"
+                  type="button" 
+                  onClick={handleFormNextStep} 
+                  disabled={!Boolean(state.className !== '' && state.mainSpec !== '')}
+                />
                 <span onClick={handleFormPreviousStep}>Voltar</span>
               </FormSection>
             }
 
-            { formStep === 3 &&
+            { formStep === 4 &&
               <FormSection>
                 <h3>Informações adicionais</h3>
                 <p>Use este espaço para nos informar sobre você queira. Logs, armory ou Raider.io não são precisos.</p>
@@ -260,12 +220,12 @@ export default function ApplyForm(){
                   value={state.about}
                   onChange={handleChange}
                   />
-                <Button type="button" onClick={handleFormNextStep} >Próximo</Button>              
+                <Button label="Próximo" type="button" onClick={handleFormNextStep} />
                 <span onClick={handleFormPreviousStep}>Voltar</span>
               </FormSection>
             }
 
-            { formStep === 4 &&
+            { formStep === 5 &&
               <FormSection>
                 <h3>Revise suas informações</h3>
                 <p>Confira se os dados informados estão corretos antes de enviar o seu apply.</p>
@@ -280,7 +240,7 @@ export default function ApplyForm(){
                 {state.about !== '' &&
                   <Textarea label="Informações adicionais" name="" value={state.about} disabled/>
                 }                
-                <Button type="submit" disabled={validateSubmit}>Enviar</Button>    
+                <Button label="Enviar" type="submit" disabled={validateSubmit} />
                 <span onClick={handleFormPreviousStep}>Voltar</span>                      
               </FormSection>
             }          
@@ -291,7 +251,9 @@ export default function ApplyForm(){
           <FormFallback>
             <GoCheck size={140} color="#00ff04" />
             <h3>Apply realizado com sucesso!</h3>
-            <p>Agora basta aguardar nosso contato. Em caso de dúvidas, contate-nos via discord.</p>            
+            <p>Por favor acesse nosso discord pelo link abaixo e aguarde o resultado. Ele será feito automaticamente por lá.</p>
+            <p>Caso não receba um feedback, contate nossos responsáveis:</p>
+            <p>Shake: shake#1455 - Hammertimèop: celsocontin#1441</p>
             <a href="https://discord.gg/9Be497S" target="_blank" rel="noopener noreferrer">
               <img src="/images/discord_logo.svg" alt="Discord" />         
             </a>   
@@ -306,7 +268,7 @@ export default function ApplyForm(){
             <a href="https://discord.gg/9Be497S" target="_blank" rel="noopener noreferrer">
               <img src="/images/discord_logo.svg" alt="Discord" />         
             </a>   
-            <Button onClick={handleFormReset}>Tentar novamente</Button>
+            <Button label="Tentar novamente" onClick={handleFormReset} />
           </FormFallback>
         }  
 
