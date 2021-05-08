@@ -128,7 +128,7 @@ export default function ApplyForm(){
       about: state.about
     }
 
-    await axios.post('/api/apply', data)
+    await axios.post('/api/newApply', data)
       .then(() => {
         setApplyFormStatus(applyFormState.success)
         setLoading(false)

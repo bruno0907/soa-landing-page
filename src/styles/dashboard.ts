@@ -9,8 +9,6 @@ export const Container = styled.div`
   min-height: 70vh;   
   display: flex;  
   flex-direction: column;
-  align-items: center;
-  justify-content: center;    
 
   hr{
     width: 100%;    
@@ -116,46 +114,46 @@ export const MenuBar = styled.header<MenuProps>`
   }
 
   @media(max-width: 980px){  
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: fit-content;    
-      padding: 38px 22px;;
-      min-height: 100%;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;   
-      ${({ isOpen }) => isOpen === false 
-        ? css`transform: translateX(-150px);` 
-        : css`transform: translateX(0);`
-      };
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: fit-content;    
+    padding: 38px 22px;;
+    min-height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;   
+    ${({ isOpen }) => isOpen === false 
+      ? css`transform: translateX(-150px);` 
+      : css`transform: translateX(0);`
+    };
 
-      img{
-        margin: 0;
-      }
+    img{
+      margin: 0;
+    }
 
-      div{
-        flex-direction: column;    
-
-        button{
-          flex-direction: column;
-          padding: 16px;
-
-          span{
-            display: none;
-          }
-        }    
-
-        button + button{
-          margin-left: 0;
-          margin-top: 16px
-        }
-      }
+    div{
+      flex-direction: column;    
 
       button{
-        margin: 0%;
+        flex-direction: column;
+        padding: 16px;
+
+        span{
+          display: none;
+        }
+      }    
+
+      button + button{
+        margin-left: 0;
+        margin-top: 16px
       }
     }
+
+    button{
+      margin: 0%;
+    }
+  }
 `
 
 export const Content = styled.div`

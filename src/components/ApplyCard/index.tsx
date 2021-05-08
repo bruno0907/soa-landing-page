@@ -52,7 +52,7 @@ const ApplyCard = ({ apply }: ApplyProps) => {
 
   return (            
     <Container>
-      <Link href={`/apply/${apply._id}`}>
+      <Link href={`/apply/${apply.charName}`}>
         <Card applyStatus={apply.approvalStatus}>
           <CardHeader 
             playerClass={apply.className} 

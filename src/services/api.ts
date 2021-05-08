@@ -42,13 +42,13 @@ class Api{
     return await api.post('/applies', data)
   }
 
-  async applyStatusHandle(id: string | string[], status: string | string[]){
+  async applyStatusHandle(id: string, status: string | string[]){
     return await api.post(`/apply/${id}`, {
       approvalStatus: status
     })
   }
 
-  async applyRemove(id: string | string[]){
+  async applyRemove(id: string){
     return await api.delete(`/apply/${id}`)
   }
 

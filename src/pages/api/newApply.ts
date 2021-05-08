@@ -6,8 +6,8 @@ import {
   DiscordNewApplyService 
 } from '../../services/discord'
 
-export default async function newApply(req: VercelRequest, res: VercelResponse){
-  await connectToDatabase()  
+export default async function handleApplies(req: VercelRequest, res: VercelResponse){
+  await connectToDatabase()    
 
   try {
     const data = {

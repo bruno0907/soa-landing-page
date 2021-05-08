@@ -14,7 +14,7 @@ class DiscordNewApplyService {
 
     try {
       const hook = new Discord.WebhookClient(String(WEBHOOK_ID), String(WEBHOOK_TOKEN))
-      await hook.send(`@here \nVocê tem um novo apply! \n${charName} - ${className} ${mainSpec} \nhttps://soa-apply-frontend.vercel.app/apply/${_id}`)
+      await hook.send(`@GM \nVocê tem um novo apply! \n${charName} - ${className} ${mainSpec} \nhttps://soa-apply-frontend.vercel.app/apply/${_id}`)
       
     } catch (error) {
       console.log(error.message)

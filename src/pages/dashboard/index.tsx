@@ -1,14 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
-
 import { useRouter } from 'next/router'
-
+import useSWR from 'swr';
 import { FiPower, FiCheck, FiAlertTriangle, FiX, FiList, FiMenu } from 'react-icons/fi';
-
 import ApplyCard from '../../components/ApplyCard';
-
 import Loader from 'react-loader-spinner';
-
-import api from '../../services/api'
 
 import { 
   ApplyList, 
@@ -32,48 +27,47 @@ interface ApplyProps{
 
 function Dashboard(){  
   const router = useRouter()
-  const [applies, setApplies] = useState<ApplyProps[]>()    
-  const [appliesCount, setAppliesCount] = useState<ApplyProps[]>()  
+
+  const { error, data } = useSWR(`/api/getApplies?approvalStatus=pending`)
+
+  const [applies, setApplies] = useState<ApplyProps[]>()      
   const [menuVisibility, setMenuVisibility] = useState(false)
+
+  const appliesCount = data.length || 0
   
-  // const token = localStorage.getItem('@SoA-Admin:Token')
-  // !token && router.push('/')  
+  useEffect(() => {
+    if(error) return
+    if(!data) return
+    
+    setApplies(data)
+  }, [data, error])  
 
   const getApplies = useCallback(async(approvalStatus?: string) => {
     if(approvalStatus){
       setMenuVisibility(false)
-      const pendingApplications = await api.getApplies(`?status=${approvalStatus}`)
-      if(!pendingApplications) return 
-      const { data } = pendingApplications
-      return setApplies(data)
+
+      const response = await fetch(`/api/getApplies?approvalStatus=${approvalStatus}`)
+      if(!response) return 
+
+      const data = await response.json()
+      setApplies(data)
+      return
     }
-    const response = await api.getApplies()
+
+    const response = await fetch(`/api/getApplies`)
+    if(!response) return 
+
+    const data = await response.json()
+    setApplies(data)
     setMenuVisibility(false)
-    
-    if(!response) return  
-    const { data } = response
-    
-    setApplies(data.applies)    
-    setAppliesCount(data.applies)
+    return
   }, [])
-  
-  useEffect(() => {
-    getApplies()    
-
-  }, [getApplies])
-
-  const newAppliesCounter = appliesCount?.filter(apply => apply.approvalStatus === 'pending').length || 0
 
   const logout = () => {
-    // const rememberMe = localStorage.getItem('@SoA-Admin:RememberMe')
-
-    // if(!rememberMe){
-    //   localStorage.removeItem('@SoA-Admin:Token')
-    // }
     return router.push('/')
   }
 
-  const handleMenu = () => setMenuVisibility(!menuVisibility)
+  const handleMenu = () => setMenuVisibility(prevVisibility => !prevVisibility)
   
   return (
     <Container>  
@@ -98,7 +92,7 @@ function Dashboard(){
             <FiX size={24}/> 
             <span>Applies rejeitados</span>
           </button>
-          <button onClick={() => getApplies()}>
+          <button onClick={() => getApplies('')}>
           <FiList size={24}/>
             <span>Todos os applies</span>            
           </button>
@@ -110,11 +104,11 @@ function Dashboard(){
       
       <Content>
         <Header>
-          <h1>Sons of Aiur Applies Dashboard</h1>
-          { newAppliesCounter === 0 
+          <h1>Sons of Aiur Applies</h1>
+          { appliesCount === 0 
             ? <span>Nenhum apply no momento</span> 
-            : <span>Você possui <strong>{newAppliesCounter}</strong> {newAppliesCounter > 1 ? 'novos applies' : 'novo apply'}</span>
-          }
+            : <span>Você possui <strong>{appliesCount}</strong> {appliesCount > 1 ? 'novos applies' : 'novo apply'}</span>
+          } 
         </Header>
         <hr/>
         <Container>
