@@ -43,7 +43,7 @@ interface ApplyProps{
 
 const Apply = () => {
   const router = useRouter()  
-  const { charName: name } = router.query
+  const { charName: name } = router.query 
 
   const { error, data } = useSWR(`/api/getApply?charName=${name}`)
 
@@ -55,19 +55,19 @@ const Apply = () => {
     const getApply = async() => {
       if(error) return
       if(!data) return
-
-      const [charName,] = data.charName.split(/[^a-zA-Z/g]/)
+      
       const apply = {
         ...data,
-        charName
+        charName: name
       }
+      
       setApplyInfo(apply)
     }
     getApply()
 
     return () => setIsLoading(true)
 
-  }, [error, data, setIsLoading])   
+  }, [error, data, setIsLoading, name])   
 
   useEffect(() => {
     if(!applyInfo) return 
