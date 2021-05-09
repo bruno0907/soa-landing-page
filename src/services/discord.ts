@@ -7,14 +7,14 @@ interface ApplyProps{
   mainSpec: string;
 }
 
-const { WEBHOOK_ID, WEBHOOK_TOKEN } = process.env
+const { WEBHOOK_ID, WEBHOOK_TOKEN, DASHBOARD_URL, MENTION_CHANNEL } = process.env
 
 class DiscordNewApplyService {
-  async execute({ _id, charName, className, mainSpec }: ApplyProps){
+  async execute({ charName, className, mainSpec }: ApplyProps){
 
     try {
       const hook = new Discord.WebhookClient(String(WEBHOOK_ID), String(WEBHOOK_TOKEN))
-      await hook.send(`@GM \nVocê tem um novo apply! \n${charName} - ${className} ${mainSpec} \nhttps://soa-apply-frontend.vercel.app/apply/${_id}`)
+      await hook.send(`${MENTION_CHANNEL} \nVocê tem um novo apply! \n${charName} - ${className} ${mainSpec} \n${DASHBOARD_URL}${charName}`)
       
     } catch (error) {
       console.log(error.message)
