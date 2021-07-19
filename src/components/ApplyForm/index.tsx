@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, FormEvent } from 'react'
-import useSWR from 'swr'
+
+import { setCookie } from 'nookies'
 
 import useLoader from '../../hooks/useLoader'
 import useForm from '../../hooks/useForm'
@@ -42,24 +43,29 @@ const initialFormData = {
 }
 
 export default function ApplyForm(){   
-  const { error, data } = useSWR('/api/classes')
   const { Loader, isLoading, setIsLoading } = useLoader(true)
-  const { state, setState, handleChange, handleFormPreviousStep, handleFormNextStep, formStep, setFormStep } = useForm(initialFormData)
+
+  const { 
+    state, 
+    setState, 
+    handleChange, 
+    handleFormPreviousStep, 
+    handleFormNextStep, 
+    formStep, 
+    setFormStep 
+  } = useForm(initialFormData)
   
   const [classes, setClasses] = useState<ClassesProps[]>([])
   const [classSpecs, setClassSpecs] = useState<unknown[]>([])   
   const [applyFormStatus, setApplyFormStatus] = useState(applyFormState.pending)
 
   useEffect(() => {
-    if(error) setApplyFormStatus(applyFormState.maintenance)
-    if(!data) return
+    axios.get('/api/classes')
+    .then(({ data }) => setClasses(data))
+    .catch(() => setApplyFormStatus(applyFormState.maintenance))
+    .finally(() => setIsLoading(false))
 
-    if(data){
-      setClasses(data)
-      setIsLoading(false)    
-    }
-
-  }, [error, data, setIsLoading])
+  }, [setIsLoading]);  
   
   const handleClassChange = (value: string) => {   
     setState({
@@ -67,28 +73,28 @@ export default function ApplyForm(){
       className: value,
       mainSpec: '',
       offSpec: ''
-    }) 
+    });
        
-    fetchClassSpecs(value)         
-  }  
+    fetchClassSpecs(value);
+  };
   
   const fetchClassSpecs = useCallback((classChosen) => {       
     const selectedClass = classes.filter(option => option.className === classChosen)
-    setClassSpecs(selectedClass[0].specializations)
+    setClassSpecs(selectedClass[0].specializations);
     
-  }, [classes])  
+  }, [classes]);
 
   const validateSubmit = !Boolean(
     state.battleTag.length > 0 &&
     state.charName.length > 0 && 
     state.className.length > 0 && 
     state.mainSpec.length > 0
-  ) 
+  );
 
   const handleSubmit = async (event: FormEvent) => {
-    event.preventDefault()
+    event.preventDefault();
     
-    setIsLoading(true)
+    setIsLoading(true);
 
     const data = {
       battleTag: state.battleTag,
@@ -97,17 +103,18 @@ export default function ApplyForm(){
       mainSpec: state.mainSpec,
       offSpec: state.offSpec,
       about: state.about
-    }
+    };
 
     await axios.post('/api/newApply', data)
       .then(() => {
+        setCookie(undefined, '@soa.apply', data.charName, {
+          maxAge: 60 * 60 * 24 * 30,
+          path: '/'
+        })
         setApplyFormStatus(applyFormState.success)
-        setIsLoading(false)
       })
-      .catch(() => {
-        setApplyFormStatus(applyFormState.error)
-        setIsLoading(false)
-      }) 
+      .catch(() => setApplyFormStatus(applyFormState.error))
+      .finally(() => setIsLoading(false))
   }
 
   const handleFormReset = (event: FormEvent) => {
@@ -251,20 +258,24 @@ export default function ApplyForm(){
           <FormFallback>
             <GoCheck size={140} color="#00ff04" />
             <h3>Apply realizado com sucesso!</h3>
-            <p>Por favor acesse nosso discord pelo link abaixo e aguarde o resultado. Ele será feito automaticamente por lá.</p>
-            <p>Caso não receba um feedback, contate nossos responsáveis:</p>
+            <a href={`http://localhost:3000/my-apply`} target="_blank" rel="noopener noreferrer">
+              Acompanhe por aqui o status do seu apply
+            </a>
+            <p>Se tiver dúvidas ou quiser trocar uma idéia direto conosco, entre em contato ou visite nosso discord.</p>
             <p>Shake: shake#1455 - Hammertimèop: celsocontin#1441</p>
             <a href="https://discord.gg/9Be497S" target="_blank" rel="noopener noreferrer">
-              <img src="/images/discord_logo.svg" alt="Discord" />         
-            </a>   
-          </FormFallback> 
+              <img src="/images/discord_logo.svg" alt="Discord" />
+            </a>
+          </FormFallback>
         }
 
         { applyFormStatus === 'ERROR' &&
           <FormFallback>
             <GoX size={140} color="#822121" />
             <h3>Houve um erro ao enviar seu apply!</h3>
-            <p>Acesse nosso discord e fale diretamente conosco ou tente novamente.</p>
+            <p>- Certifique-se de que você informou corretamente o nome do seu personagem.</p>
+            <p>- Lembre-se! Não é necessário informar o seu servidor. Caso seu personagem não esteja no Azralon, contate-nos diretamente</p>            
+            <p>- Caso o erro persista, acesse nosso discord e fale diretamente conosco.</p>
             <a href="https://discord.gg/9Be497S" target="_blank" rel="noopener noreferrer">
               <img src="/images/discord_logo.svg" alt="Discord" />         
             </a>   

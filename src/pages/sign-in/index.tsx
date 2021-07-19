@@ -1,99 +1,77 @@
-import { FormEvent, useState, useEffect,  } from 'react';
+import { FormEvent, useState, useEffect } from 'react';
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 
-import Loader from '../../components/Loader';
-
-import { Container, ErrorBox, Form, Remember } from '../../styles/sign-in'
+import { Container, ErrorBox, Form } from '../../styles/sign-in'
 import { ChangeEvent } from 'react';
-import axios from 'axios';
 
-interface UserAuthProps{
+import { useAuth } from '../../hooks/useAuth';
+import { GetServerSideProps } from 'next';
+import { parseCookies } from 'nookies';
+import useLoader from '../../hooks/useLoader';
+
+interface AuthProps{
   username: string;
   password: string;  
-}
+};
 
 const initialState = {
   username: '',
   password: '',  
-}
+};
 
 function SignIn(){
-  const router = useRouter()
+  const { signIn } = useAuth(); 
+  const { isLoading, setIsLoading, Loader } = useLoader(true)
 
-  const [state, setState] = useState<UserAuthProps>(initialState)
-  const [rememberMe, setRememberMe] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
-  const [loginError, setLoginError] = useState({
+  const [state, setState] = useState<AuthProps>(initialState);   
+  const [error, setError] = useState({
     state: false,
-    error: ''
-  })  
+    message: ''
+  });
 
   const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { value } = event.target
-    const { name } = event.target
+    const { value, name, } = event.target;
 
     setState({
       ...state,      
       [name]: value
-    })
+    });
+  };
 
-  }
-  
-  useEffect(() => {    
-    const isUserRemembered = localStorage.getItem('@SoA-Admin:RememberMe')
+  const handleValidation = !Boolean(state.username.length > 0 && state.password.length > 0);
 
-    if(isUserRemembered === 'true'){
-      setTimeout(() => {
-        router.push('/dashboard')
-      }, 500)
-      
-    } else {
-      setIsLoading(prevState => !prevState)
-      
-    }    
+  const handleSignIn = async (event: FormEvent) => {
+    event.preventDefault();
 
-    return () => setIsLoading(prevState => !prevState)
-    
-  }, [router])
+    setIsLoading(true);
 
-  const handleValidation = !Boolean(state.username.length > 0 && state.password.length > 0)    
+    try {
+      const { username, password } = state;
+      await signIn({
+        username,
+        password,        
+      });
 
-  const handleSubmit = async (event: FormEvent) => {
-    event.preventDefault()
-
-    setIsLoading(prevState => !prevState)
-
-    const data = {
-      username: state.username,
-      password: state.password
-    }
-
-    await axios.post('/api/auth', data).then(() => {
-      if(rememberMe === true){
-        localStorage.clear()        
-        localStorage.setItem('@SoA-Admin:RememberMe', JSON.stringify(rememberMe))
-      }  
-      router.push('/dashboard')
-      
-    }).catch(() => {      
-      localStorage.clear()      
+    } catch {
+      setError({
+        state: true,
+        message: 'Usuário ou senha inválidos'
+      });
       setState({
         ...state,
-        password: '',        
-      })  
-      setLoginError({
-        state: true,
-        error: 'Nome de usuário ou senha inválidos'
-      })       
-      setIsLoading(prevState => !prevState)   
-      
-    })
-    
-  }
+        password: ''
+      });      
+    }
+  };
+
+  useEffect(() => {
+    setIsLoading(false);
+
+    return () => setIsLoading(false)
+  }, [setIsLoading])
   
   return (
     <Container>
@@ -101,7 +79,7 @@ function SignIn(){
       <h3>Área restrita</h3>
       { isLoading 
         ? <Loader /> 
-        : <Form onSubmit={handleSubmit}>        
+        : <Form onSubmit={handleSignIn}>        
             <legend>Faça seu login</legend>
             <fieldset>
               <Input 
@@ -109,9 +87,9 @@ function SignIn(){
                 name="username"
                 value={state.username}              
                 onChange={handleChange}
-                onKeyUp={() => loginError &&setLoginError({
+                onKeyUp={() => error && setError({
                   state: false,
-                  error: ''
+                  message: ''
                 })}
               />
               <Input 
@@ -120,25 +98,15 @@ function SignIn(){
                 name="password"
                 value={state.password}
                 onChange={handleChange}
+                onKeyUp={() => error && setError({
+                  state: false,
+                  message: ''
+                })}
               />
+              { error.state === true &&
+                <ErrorBox>{error.message}</ErrorBox>
+              }            
             </fieldset>
-            { loginError.state === true &&
-              <ErrorBox>{loginError.error}</ErrorBox>
-            }
-            <Remember>
-              <div>            
-                <input 
-                  id="rememberMe"
-                  type="checkbox" 
-                  name="rememberMe" 
-                  checked={rememberMe}
-                  onChange={() => setRememberMe(prevState => !prevState)}
-                />            
-                <span></span>
-                <label htmlFor="rememberMe">Lembrar-me</label>
-              </div>
-              <Link href ="/forgot-password">Esqueci minha senha!</Link>
-            </Remember>
             <Button label="Entrar" type="submit" disabled={handleValidation} />
             <Link href="/">Voltar</Link>
           </Form>
@@ -148,3 +116,20 @@ function SignIn(){
 }
 
 export default SignIn;
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {  
+  const cookies = parseCookies(ctx);
+
+  if(cookies['@soa.user']) {
+    return {
+      redirect: {
+        destination: '/dashboard',
+        permanent: false,          
+      }
+    }
+  }
+  
+  return {
+    props: {}
+  }
+}

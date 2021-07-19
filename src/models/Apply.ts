@@ -1,15 +1,19 @@
 import mongoose from 'mongoose'
 
 const ApplySchema = new mongoose.Schema({
+  avatar: {
+    type: String,
+    required: true,
+  },
   battleTag: {
     type: String,
     required: true,
   },
-  charName: {
+  name: {
     type: String,
     required: true,
   },
-  className: {
+  class: {
     type: String,
     required: true
   },  
@@ -21,6 +25,21 @@ const ApplySchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+  ilvl: {
+    type: Number,
+    required: true,
+  },
+  io: {
+    type: Number,
+    required: true,
+  },
+  raidProgression: {
+    type: {
+      heroic: Number,
+      mythic: Number,
+    },
+    require: true,
+  },
   about: {
     type: String,
     required: false,
@@ -31,6 +50,6 @@ const ApplySchema = new mongoose.Schema({
   }  
 }, {
   timestamps: true
-})
+});
 
-export default mongoose.models.Apply || mongoose.model('Apply', ApplySchema)
+export default mongoose.models.Apply || mongoose.model('Apply', ApplySchema);

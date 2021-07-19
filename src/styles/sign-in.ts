@@ -49,6 +49,7 @@ export const Form = styled.form`
   fieldset{
     width: 100%;
     border: none;    
+    margin-bottom: 48px;
 
     div + div{
       margin-top: 12px;
@@ -57,77 +58,6 @@ export const Form = styled.form`
 
   button{
     margin-bottom: 24px;
-  }
-`
-
-export const Remember = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 24px 0 42px;
-  transition: filter .1s;  
-
-  div{
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-
-    span{
-      position: relative;
-      width: 24px;
-      height: 24px;
-      border-radius: 8px;      
-      border: solid 2px var(--color-background);      
-      background: var(--color-background);
-
-      ::before{
-        content:'';
-        position: absolute;   
-        display: none;  
-        top: 2px;
-        left: 6px;           
-        width: 5px;
-        height: 10px;
-        border: solid var(--color-text-primary);
-        border-width: 0 3px 3px 0;
-        -webkit-transform: rotate(45deg);
-        -ms-transform: rotate(45deg);
-        transform: rotate(45deg);
-      }
-    }
-
-    input{
-      position: absolute;      
-      top: 0;
-      left: 0;
-      width: 24px;
-      height: 24px;
-      z-index: 1;
-      opacity: 0;
-      cursor: pointer;
-
-        &:hover ~ span{
-          border-color: var(--color-primary);
-        }
-
-        &:checked ~ span{
-          border: solid 2px var(--color-primary);
-
-          ::before{
-            display: block
-          };
-        }
-    }
-
-    label{
-      font-size: .9rem;
-      line-height: 145%;
-      color: var(--color-text-secondary);
-      padding-left: 8px;
-      cursor: pointer;
-    }
   }
 `
 

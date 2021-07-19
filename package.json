@@ -17,6 +17,7 @@
     "mongoose": "^5.12.7",
     "next": "^10.2.0",
     "next-connect": "^0.10.1",
+    "nookies": "^2.5.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-icons": "^4.1.0",

@@ -1,30 +1,31 @@
-import { VercelRequest, VercelResponse } from '@vercel/node'
+import { VercelRequest, VercelResponse } from '@vercel/node';
 import { compare } from 'bcryptjs'
 
-import connectToDatabase from '../../database/db'
-import Admin from '../../models/Admin'
+import connectToDatabase from '../../database/db';
+import Admin from '../../models/Admin';
 
 export default async function handler(req: VercelRequest, res: VercelResponse){    
-  if(req.method !== 'POST') return res.status(405)
+  if(req.method !== 'POST') return res.status(405);
 
   try {  
-    const { username, password } = req.body
+    const { username, password } = req.body;
   
-    if(!username || !password) return res.status(400).json({ error: 'Username and password is required!' })
-    await connectToDatabase()
+    if(!username || !password) return res.status(400).json({ error: 'E-mail and/or password is required!' });
 
-    const response = await Admin.findOne({ username })
+    await connectToDatabase();
 
-    if(!response) return res.status(404).json({ error: 'User not found!'})
+    const response = await Admin.findOne({ username });
 
-    const isPasswordValid = await compare(password, response.password)
+    if(!response) return res.status(404).json({ error: 'E-mail not found!'});
 
-    if(!isPasswordValid) return res.status(404).json({ error: 'Invalid password!'})
+    const isPasswordValid = await compare(password, response.password);
+
+    if(!isPasswordValid) return res.status(404).json({ error: 'Invalid password!'});
   
-    return res.status(202).json({ message: 'Authenticated!'})    
+    return res.status(202).json({ message: 'Authenticated!'}) ;   
     
   } catch (error) {
-    return res.status(500).json({ error: error.message })
+    return res.status(500).json({ error: error.message });
     
-  }
-}
+  };
+};

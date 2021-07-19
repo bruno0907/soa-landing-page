@@ -6,7 +6,10 @@ interface ApplyStatus{
 
 interface HeaderProps{
   playerClass: string;
-  io: number;
+}
+
+interface BodyProps{
+  io: number;  
 }
 
 export const Container = styled.li`    
@@ -139,9 +142,9 @@ export const CardHeader = styled.div<HeaderProps>`
       }
 
       p{
-        font-size: .9rem;      
+        font-size: 1rem;      
         color: var(--color-text-secondary);
-        font-weight: 500;
+        font-weight: 400;
       }
     }
 
@@ -152,23 +155,10 @@ export const CardHeader = styled.div<HeaderProps>`
       padding: 8px 16px;
       border-radius: 8px;
       font-weight: 500;
-
-      ${({ io }) => (io >= 1100) && css`
-        color: #ff8000;
-      `}
-
-      ${({ io }) => (io > 700 && io < 1100) && css`
-        color: #5256d6;
-      `}
-
-      ${({ io }) => (io < 700) && css`
-        color: #2ca233;
-      `}   
     }
-
 `
 
-export const CardBody = styled.div`
+export const CardBody = styled.div<BodyProps>`
     display: flex;
     flex-direction: column;    
     justify-content: center;
@@ -184,6 +174,15 @@ export const CardBody = styled.div`
     align-items: center;    
     font-weight: 500;
 
+    p{
+      width: 100%;
+      text-align: center;
+      border: solid 2px var(--color-secondary);
+      background: var(--color-background);
+      padding: 8px 16px;
+      border-radius: 8px
+    }
+
     span{
       width: 100%;
       text-align: center;
@@ -191,9 +190,28 @@ export const CardBody = styled.div`
       background: var(--color-background);
       padding: 8px 16px;
       border-radius: 8px;
-    } 
 
-    span + span{
+      ${({ io }) => (io >= 1500) && css`
+        color: #ff8000;
+      `}
+
+      ${({ io }) => (io >= 1100) && css`
+        color: #ff8000;
+      `}
+
+      ${({ io }) => (io > 700 && io < 1100) && css`
+        color: #5256d6;
+      `}
+
+      ${({ io }) => (io < 700) && css`
+        color: #2ca233;
+      `}   
+    }
+
+    p + p{
+      margin-left: 8px;
+    } 
+    p + span{
       margin-left: 8px;
     } 
   }

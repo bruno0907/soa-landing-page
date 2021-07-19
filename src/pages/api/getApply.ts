@@ -1,24 +1,23 @@
-import { VercelRequest, VercelResponse } from '@vercel/node'
+import { VercelRequest, VercelResponse } from '@vercel/node';
 
-import connectToDatabase from '../../database/db'
-import Apply from '../../models/Apply'
+import connectToDatabase from '../../database/db';
+import Apply from '../../models/Apply';
 
 export default async function handleApply(req: VercelRequest, res: VercelResponse){
-  await connectToDatabase()  
+  await connectToDatabase();
   
-  const { charName } = req.query
+  const { name } = req.query;  
 
   try {
-    const response = await Apply.findOne({
-      charName
-    })
+    const apply = await Apply.findOne({ name });
 
-    return res.status(200).json(response)    
+    if(!apply) throw new Error('Apply not found');    
+
+    return res.status(200).json(apply);
 
   } catch (error) {
-    return res.status(404).json({
-        error: error.message
+    return res.status(500).json({
+      error: error.message
     })
-    
-  }
-}
+  };
+};
