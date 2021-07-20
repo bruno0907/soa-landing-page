@@ -80,9 +80,7 @@ const Apply = () => {
       .catch(error => console.log(error.message))
       .finally(() => setIsLoading(false))    
     
-    return () => setIsLoading(true);
-    
-  }, [name, setIsLoading]);  
+  }, [name, setIsLoading]);
 
   return (
     isLoading ? (

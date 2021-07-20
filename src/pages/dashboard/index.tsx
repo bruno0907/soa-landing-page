@@ -41,8 +41,7 @@ function Dashboard(){
   const handleMenu = () => setMenuVisibility(prevVisibility => !prevVisibility)
 
   const getApplies = useCallback(
-    async (approvalStatus?: string) => {
-      // colocar isso em um try catch ou rever lógica
+    async (approvalStatus?: string) => {      
       if(approvalStatus){      
         handleMenu()
 
@@ -64,12 +63,12 @@ function Dashboard(){
   }, []);
 
   useEffect(() => {    
-    axios.get('/api/getApplies?approvalStatus=pending')
+    axios.get('/api/getApplies')
     .then(({ data }) => setApplies(data))
     .catch(error => console.log(error))
     .finally(() => setIsLoading(false))
     
-    return () => setIsLoading(true);
+    return () => setIsLoading(false);
     
   }, [setIsLoading]);
   
@@ -96,7 +95,7 @@ function Dashboard(){
               <ApplyList>
                 { !applies 
                     ? <Container>Nenhum apply encontrado</Container>
-                    : applies.map((apply: ApplyProps) =>                 
+                    : applies.map((apply: ApplyProps) =>                                     
                         <ApplyCard key={apply._id} apply={apply}/> 
                 )}
               </ApplyList>              
