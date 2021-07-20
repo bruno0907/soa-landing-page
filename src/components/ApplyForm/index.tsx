@@ -43,6 +43,8 @@ const initialFormData = {
 }
 
 export default function ApplyForm(){   
+  const APPLY_URL = 'https://soa-apply-frontend.vercel.app/my-apply'
+  
   const { Loader, isLoading, setIsLoading } = useLoader(true)
 
   const { 
@@ -57,7 +59,7 @@ export default function ApplyForm(){
   
   const [classes, setClasses] = useState<ClassesProps[]>([])
   const [classSpecs, setClassSpecs] = useState<unknown[]>([])   
-  const [applyFormStatus, setApplyFormStatus] = useState(applyFormState.pending)
+  const [applyFormStatus, setApplyFormStatus] = useState(applyFormState.success)
 
   useEffect(() => {
     axios.get('/api/classes')
@@ -258,7 +260,7 @@ export default function ApplyForm(){
           <FormFallback>
             <GoCheck size={140} color="#00ff04" />
             <h3>Apply realizado com sucesso!</h3>
-            <a href={`http://localhost:3000/my-apply`} target="_blank" rel="noopener noreferrer">
+            <a href={APPLY_URL} target="_blank" rel="noopener noreferrer">
               Acompanhe por aqui o status do seu apply
             </a>
             <p>Se tiver dúvidas ou quiser trocar uma idéia direto conosco, entre em contato ou visite nosso discord.</p>
