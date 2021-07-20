@@ -69,7 +69,7 @@ export default function MyApply({ name }: MyApplyProps) {
     ) : (
       <>
         <Head>
-          <title>{`Sons of Aiur | Apply ${apply.name}`}</title>
+          <title>Sons of Aiur | Apply </title>
         </Head>
         <Container>       
           <Header status={apply.approvalStatus}>                                   
