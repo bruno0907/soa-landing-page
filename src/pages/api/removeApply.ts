@@ -4,10 +4,11 @@ import connectToDatabase from '../../database/db';
 import Apply from '../../models/Apply';
 
 export default async function handleApply(req: VercelRequest, res: VercelResponse){
+  await connectToDatabase();
+  
+  const { id } = req.query;
+  
   try {
-    await connectToDatabase();
-    
-    const { id } = req.query;
     const apply = await Apply.findByIdAndRemove(id);
     
     if(!apply) throw Error('Apply not found');

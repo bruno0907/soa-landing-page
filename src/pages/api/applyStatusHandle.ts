@@ -4,9 +4,9 @@ import connectToDatabase from '../../database/db';
 import Apply from '../../models/Apply';
 
 export default async function handleApply(req: VercelRequest, res: VercelResponse){  
-  try {
-    await connectToDatabase();
-    
+  await connectToDatabase();
+  
+  try {    
     const { id, approvalStatus } = req.query;
 
     const apply = await Apply.findById(id)

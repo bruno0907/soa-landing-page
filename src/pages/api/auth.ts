@@ -7,13 +7,13 @@ import Admin from '../../models/Admin';
 export default async function handler(req: VercelRequest, res: VercelResponse){    
   if(req.method !== 'POST') return res.status(405);
 
-  try {  
-    const { username, password } = req.body;
+  await connectToDatabase();
   
-    if(!username || !password) return res.status(400).json({ error: 'E-mail and/or password is required!' });
+  const { username, password } = req.body;
 
-    await connectToDatabase();
+  if(!username || !password) return res.status(400).json({ error: 'E-mail and/or password is required!' });
 
+  try {  
     const response = await Admin.findOne({ username });
 
     if(!response) return res.status(404).json({ error: 'E-mail not found!'});

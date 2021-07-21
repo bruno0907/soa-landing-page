@@ -93,9 +93,6 @@ const Apply = () => {
       </Container>
     ) : (
       <>
-        <Head>
-          <title>Sons of Aiur | Apply</title>
-        </Head>
         <Container>       
           <Header status={apply.approvalStatus}>
             <Link href="/dashboard">

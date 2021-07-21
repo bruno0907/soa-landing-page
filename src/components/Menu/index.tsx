@@ -4,7 +4,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { MenuBar, MenuButton } from './styles';
 
 type MenuProps = {
-  getApplies: (status: string) => void;
+  getApplies: (status?: string) => void;
   menuVisibility: boolean;
   handleMenu: () => void;
 }
@@ -34,7 +34,7 @@ const Menu = ({ getApplies, menuVisibility, handleMenu }: MenuProps) => {
             <FiX size={24}/> 
             <span>Applies rejeitados</span>
           </button>
-          <button onClick={() => getApplies('')}>
+          <button onClick={() => getApplies()}>
           <FiList size={24}/>
             <span>Todos os applies</span>            
           </button>

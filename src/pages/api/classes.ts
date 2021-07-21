@@ -4,9 +4,9 @@ import connectToDatabase from '../../database/db';
 import Classes from '../../models/Classes';
 
 export default async function handler(req: VercelRequest, res: VercelResponse){  
-  try {
-    await connectToDatabase();
+  await connectToDatabase();
 
+  try {
     const response = await Classes.find();
   
     return res.status(200).json(response);

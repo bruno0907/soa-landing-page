@@ -32,18 +32,18 @@ interface ApplyProps {
 }
 
 export default async function handleApplies(req: VercelRequest, res: VercelResponse){  
+  await connectToDatabase();
+
+  const { 
+    battleTag,
+    charName,
+    className,
+    mainSpec,
+    offSpec,
+    about,
+  } = req.body
+
   try {
-    await connectToDatabase();
-
-    const { 
-      battleTag,
-      charName,
-      className,
-      mainSpec,
-      offSpec,
-      about,
-    } = req.body
-
     const rioResponse = await api.get(`${defaultParams}${charName}&${extraInfoParams}`);
       
     if(!rioResponse.data) throw Error('Error fetching Raider.io information');

@@ -4,15 +4,12 @@ import connectToDatabase from '../../database/db';
 import Admin from '../../models/Admin';
 
 export default async function handler(req: VercelRequest, res: VercelResponse){
-  try {  
-    const { email } = req.body;
+  await connectToDatabase();
 
-    await connectToDatabase();
-
+  const { email } = req.body;
+  try {
     const user = await Admin.find({ email });
-
-    console.log(user)
-
+    
     if(!user) {      
       return res.status(404).json({ error: 'E-mail not found!' });
     };
