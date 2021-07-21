@@ -1,36 +1,36 @@
-import { useState, useEffect, useCallback, FormEvent } from 'react'
+import { useState, useEffect, useCallback, FormEvent } from 'react';
 
-import { setCookie } from 'nookies'
+import { setCookie } from 'nookies';
 
-import useLoader from '../../hooks/useLoader'
-import useForm from '../../hooks/useForm'
+import useLoader from '../../hooks/useLoader';
+import useForm from '../../hooks/useForm';
 
-import Input from '../Input'
-import Select from '../Select'
-import Textarea from '../Textarea'
-import Button from '../Button'
+import Input from '../Input';
+import Select from '../Select';
+import Textarea from '../Textarea';
+import Button from '../Button';
 
-import { GoCheck, GoX, GoAlert } from 'react-icons/go'
+import { GoCheck, GoX, GoAlert } from 'react-icons/go';
 
 import { 
   Form, 
   FormSection,   
   FormFallback, 
 } from './styles'
-import axios from 'axios'
+import axios from 'axios';
 
 interface ClassesProps{   
   _id: string;
   className: string;
   specializations: string[];  
-}
+};
 
 const applyFormState = {
   pending: 'PENDING',
   success: 'SUCCESS',
   error: 'ERROR',
   maintenance: 'MAINTENANCE'
-}
+};
 
 const initialFormData = {
   battleTag: '',
@@ -40,12 +40,12 @@ const initialFormData = {
   offSpec: '',
   about: '',  
   formSteps: 5
-}
+};
 
 export default function ApplyForm(){   
-  const APPLY_URL = 'https://soa-apply-frontend.vercel.app/my-apply'
+  const applyUrl = 'https://sons-of-aiur.vercel.app/my-apply';
   
-  const { Loader, isLoading, setIsLoading } = useLoader(true)
+  const { Loader, isLoading, setIsLoading } = useLoader(true);
 
   const { 
     state, 
@@ -55,11 +55,11 @@ export default function ApplyForm(){
     handleFormNextStep, 
     formStep, 
     setFormStep 
-  } = useForm(initialFormData)
+  } = useForm(initialFormData);
   
-  const [classes, setClasses] = useState<ClassesProps[]>([])
-  const [classSpecs, setClassSpecs] = useState<unknown[]>([])   
-  const [applyFormStatus, setApplyFormStatus] = useState(applyFormState.pending)
+  const [classes, setClasses] = useState<ClassesProps[]>([]);
+  const [classSpecs, setClassSpecs] = useState<unknown[]>([]); 
+  const [applyFormStatus, setApplyFormStatus] = useState(applyFormState.pending);
 
   useEffect(() => {
     axios.get('/api/classes')
@@ -117,14 +117,14 @@ export default function ApplyForm(){
       })
       .catch(() => setApplyFormStatus(applyFormState.error))
       .finally(() => setIsLoading(false))
-  }
+  };
 
   const handleFormReset = (event: FormEvent) => {
     event.preventDefault()
     
     setFormStep(1)
     setApplyFormStatus(applyFormState.pending)
-  }
+  };
 
   return(  
     <Form 
@@ -137,7 +137,7 @@ export default function ApplyForm(){
             <h2>Formulário de Apply</h2>
             { formStep === 1 &&     
                 <FormSection>
-                  <h3>Battle Tag</h3>
+                  <h3>1 - Battle Tag</h3>
                   <p>Por favor nos informe a sua battle tag. Será por ela que faremos contato contigo.</p>
                   <Input 
                     label="Battle Tag (Exemplo: shake#1455)"
@@ -156,7 +156,7 @@ export default function ApplyForm(){
 
             { formStep === 2 &&            
               <FormSection>
-                <h3>Nome do personagem</h3>
+                <h3>2 - Nome do personagem</h3>
                 <p>Informe apenas o nome do seu personagem. Não há necessidade de informar o servidor.</p>
                 <Input 
                   label="Nome do Personagem"
@@ -176,7 +176,7 @@ export default function ApplyForm(){
 
             { formStep === 3 &&
               <FormSection>
-                <h3>Classe, spec e off-spec</h3>
+                <h3>3 - Classe, spec e off-spec</h3>
                 <p>Escolha a sua classe, spec e se possuir uma off-spec</p>
                 <Select label="Classe" name="class"value={state.className}>
                   {classes.map(gameClass => 
@@ -221,7 +221,7 @@ export default function ApplyForm(){
 
             { formStep === 4 &&
               <FormSection>
-                <h3>Informações adicionais</h3>
+                <h3>4 - Informações adicionais</h3>
                 <p>Use este espaço para sua apresentação caso queira. Logs, Armory ou Raider.io não são necessários.</p>
                 <Textarea
                   label="Informações adicionais"
@@ -260,7 +260,7 @@ export default function ApplyForm(){
           <FormFallback>
             <GoCheck size={140} color="#00ff04" />
             <h3>Apply realizado com sucesso!</h3>
-            <a href={APPLY_URL} target="_blank" rel="noopener noreferrer">
+            <a href={applyUrl} target="_blank" rel="noopener noreferrer">
               Acompanhe por aqui o status do seu apply
             </a>
             <p>Se tiver dúvidas ou quiser trocar uma idéia direto conosco, entre em contato ou visite nosso discord.</p>
@@ -299,5 +299,5 @@ export default function ApplyForm(){
       </>
       }
     </Form>      
-  )  
-}
+  );
+};
