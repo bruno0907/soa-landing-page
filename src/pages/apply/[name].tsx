@@ -93,13 +93,8 @@ const Apply = () => {
       </Container>
     ) : (
       <>
-        { apply && 
-          <Head>          
-            <title>{`Sons of Aiur | Apply ${apply.name}}`}</title>
-          </Head>
-        }
         <Head>
-          <title>{`Sons of Aiur | Apply`}</title>
+          <title>Sons of Aiur | Apply</title>
         </Head>
         <Container>       
           <Header status={apply.approvalStatus}>
