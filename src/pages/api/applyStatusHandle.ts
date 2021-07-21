@@ -22,8 +22,6 @@ export default async function handleApply(req: VercelRequest, res: VercelRespons
     return res.status(204).send(true);
 
   } catch (error) {
-    return res.status(500).json({
-      error: error.message
-    })
+    return res.status(500).json({ error })
   };
 };

@@ -76,8 +76,6 @@ export default async function handleApplies(req: VercelRequest, res: VercelRespo
     return res.status(201).json(apply);
 
   } catch (error) {
-    return res.status(404).json({
-        error: error.message
-    });
+    return res.status(404).json({ error });
   };
 };

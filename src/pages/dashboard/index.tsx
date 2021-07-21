@@ -63,7 +63,7 @@ function Dashboard(){
   }, []);
 
   useEffect(() => {    
-    axios.get('/api/getApplies')
+    axios.get('/api/getApplies?approvalStatus=pending')
     .then(({ data }) => setApplies(data))
     .catch(error => console.log(error))
     .finally(() => setIsLoading(false))
