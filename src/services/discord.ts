@@ -13,23 +13,17 @@ class DiscordNewApplyService {
   async execute({ charName, className, mainSpec }: ApplyProps){
     try {
       const hook = new Discord.WebhookClient(String(WEBHOOK_ID), String(WEBHOOK_TOKEN));
-      await hook.send(`${CHANNEL_TO_MENTION} \nVocê tem um novo apply!\n${charName} - ${className} ${mainSpec} \n${APPLY_URL}/${charName}`);
-      return      
+
+      const response = await hook.send(`${CHANNEL_TO_MENTION} \nVocê tem um novo apply!\n${charName} - ${className} ${mainSpec} \n${APPLY_URL}/${charName}`);
+
+      return response    
     } catch (error) {
-      console.log(error.message);
-      return
+      throw new Error('Não foi possível enviar a mensagem')
+
     }    
   }
 }
 
-class DiscordNotifyApplyStatusService{
-  async execute(_id: ApplyProps){
-    console.log(_id)
-    return
-  }
-}
-
 export {
-  DiscordNewApplyService,
-  DiscordNotifyApplyStatusService
+  DiscordNewApplyService  
 }

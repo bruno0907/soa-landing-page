@@ -67,7 +67,7 @@ export default async function handleApplies(req: VercelRequest, res: VercelRespo
 
     const apply = await Apply.create<ApplyProps>(data);
 
-    const { _id, } = apply;
+    const { _id } = apply;
 
     const discordNotifyNewApply = new DiscordNewApplyService();
 
@@ -77,5 +77,6 @@ export default async function handleApplies(req: VercelRequest, res: VercelRespo
 
   } catch (error) {
     return res.status(404).json({ error });
+    
   };
 };

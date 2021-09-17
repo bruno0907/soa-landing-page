@@ -263,8 +263,7 @@ export default function ApplyForm(){
             <a href={applyUrl} target="_blank" rel="noopener noreferrer">
               Acompanhe por aqui o status do seu apply
             </a>
-            <p>Se tiver dúvidas ou quiser trocar uma idéia direto conosco, entre em contato ou visite nosso discord.</p>
-            <p>Shake: shake#1455 - Hammertimèop: celsocontin#1441</p>
+            <p>Se tiver dúvidas ou quiser trocar uma idéia direto conosco, entre em contato no nosso discord.</p>            
             <a href="https://discord.gg/9Be497S" target="_blank" rel="noopener noreferrer">
               <img src="/images/discord_logo.svg" alt="Discord" />
             </a>
