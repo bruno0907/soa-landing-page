@@ -10,7 +10,7 @@ import Select from '../Select';
 import Textarea from '../Textarea';
 import Button from '../Button';
 
-import { GoCheck, GoX, GoAlert } from 'react-icons/go';
+import { GoCheck, GoX, GoAlert, GoInfo } from 'react-icons/go';
 
 import { 
   Form, 
@@ -29,7 +29,8 @@ const applyFormState = {
   pending: 'PENDING',
   success: 'SUCCESS',
   error: 'ERROR',
-  maintenance: 'MAINTENANCE'
+  maintenance: 'MAINTENANCE',
+  closed: 'CLOSED'
 };
 
 const initialFormData = {
@@ -59,7 +60,7 @@ export default function ApplyForm(){
   
   const [classes, setClasses] = useState<ClassesProps[]>([]);
   const [classSpecs, setClassSpecs] = useState<unknown[]>([]); 
-  const [applyFormStatus, setApplyFormStatus] = useState(applyFormState.pending);
+  const [applyFormStatus, setApplyFormStatus] = useState(applyFormState.closed);
 
   useEffect(() => {
     axios.get('/api/classes')
@@ -292,6 +293,13 @@ export default function ApplyForm(){
             <a href="https://discord.gg/9Be497S" target="_blank" rel="noopener noreferrer">
               <img src="/images/discord_logo.svg" alt="Discord" />         
             </a>            
+          </FormFallback>
+        }
+
+        { applyFormStatus === 'CLOSED' &&
+          <FormFallback>
+            <GoInfo size={140} color="#436490"/>
+            <h3>Applies encerrados!</h3>                        
           </FormFallback>
         }
 
