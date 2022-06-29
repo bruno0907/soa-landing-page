@@ -1,5 +1,12 @@
 <h1 align="center">SONS OF AIUR APPLY</h1>
 
+<div align="center">
+  <a href="#project">Project</a> |
+  <a href="#technologies">Technologies</a> |
+  <a href="#features">Features</a> |
+  <a href="#screenshots">Screenshots</a>
+</div>
+
 <br/>
 
 <div align="center">
@@ -11,7 +18,7 @@
 
 <br/>
 
-## Project
+## 💻 Project
 
 <p>The purpose of this project was to allow players of World of Warcraft at the Azralon-US server to apply for sposts on the raiding team of the guild. 
 With this tool we was able to allow any player of the guild to advertise our spots in-game and redirecting the interested players to our plataform where it had all the information it needed to procced with its apply. Once its apply was submitted a integration with our discord nofifies us of the new apply allowing promptly response to the applicant.</p>
@@ -22,7 +29,7 @@ With this tool we was able to allow any player of the guild to advertise our spo
 
 </br>
 
-## Technologies
+## 🛠️ Technologies
 - [x] NextJS
 - [x] Styled-components
 - [x] Mongodb
@@ -30,15 +37,19 @@ With this tool we was able to allow any player of the guild to advertise our spo
 - [x] Axios
 - [x] ContextAPI
 
-## Features
+## ✨ Features
  - [x] Landing Page with a form to add a new apply and overall information
  - [x] Dashboard for applies handling
  - [x] Apply page with player details from user input and raider.io API
  - [x] My-apply page for user follow-up for his/her apply status
  
-## Screenshots
+## 🖼 Screenshots
 <div>  
   <img src="https://user-images.githubusercontent.com/54812906/176479867-98ad1fe1-35d9-4a4f-8d56-ad501a587776.jpg" />  
   <img src="https://user-images.githubusercontent.com/54812906/176479975-bd3caeb1-b59f-4fd8-8bbd-3f7c66462d1d.jpg" />  
   <img src="https://user-images.githubusercontent.com/54812906/176479965-ae6014ba-c9c9-463a-8f6f-b387ff19916d.jpg" />  
 </div>
+
+## 📑 License
+
+This project is under MIT license. See [LICENSE](LICENSE.md) for aditional details.
