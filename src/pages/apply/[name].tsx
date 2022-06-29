@@ -170,7 +170,7 @@ const Apply = () => {
             </ApplyBody>
 
           </ApplyContent>
-          <DeleteApplyButton onClick={() => handleRemoveApply(apply._id)}>Excluir Apply</DeleteApplyButton>          
+          <DeleteApplyButton disabled>Excluir Apply</DeleteApplyButton>          
         </Container>   
       </>
     )

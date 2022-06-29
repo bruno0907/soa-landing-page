@@ -60,7 +60,7 @@ export default function ApplyForm(){
   
   const [classes, setClasses] = useState<ClassesProps[]>([]);
   const [classSpecs, setClassSpecs] = useState<unknown[]>([]); 
-  const [applyFormStatus, setApplyFormStatus] = useState(applyFormState.closed);
+  const [applyFormStatus, setApplyFormStatus] = useState(applyFormState.pending);
 
   useEffect(() => {
     axios.get('/api/classes')

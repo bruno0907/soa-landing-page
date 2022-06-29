@@ -109,20 +109,21 @@ function Dashboard(){
 
 export default Dashboard;
 
-export const getServerSideProps: GetServerSideProps = async ctx => {  
-  const cookies = parseCookies(ctx);  
+// DISABLED FOR EXPOSITION PURPOSE
+// export const getServerSideProps: GetServerSideProps = async ctx => {  
+//  const cookies = parseCookies(ctx);  
+//
+//  if(!cookies['@soa.user']) {
+//    return {
+//      redirect: {
+//        destination: '/',
+//        permanent: false
+//      }
+//    };
+//  };  
 
-  if(!cookies['@soa.user']) {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false
-      }
-    };
-  };  
+//  return {
+//    props: {}
+//  }
 
-  return {
-    props: {}
-  }
-
-};
+//};

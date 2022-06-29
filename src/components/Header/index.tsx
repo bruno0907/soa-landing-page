@@ -6,7 +6,7 @@ const index = () => {
   return (    
     <Header>
       <h1>SONS OF AIUR</h1>      
-      <Link href="/sign-in">
+      <Link href="/dashboard">
         <button>
           Área Restrita
         </button>
