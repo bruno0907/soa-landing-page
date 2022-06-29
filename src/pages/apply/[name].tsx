@@ -170,7 +170,7 @@ const Apply = () => {
             </ApplyBody>
 
           </ApplyContent>
-          <DeleteApplyButton disabled>Excluir Apply</DeleteApplyButton>          
+          <DeleteApplyButton isDisabled>Excluir Apply</DeleteApplyButton>          
         </Container>   
       </>
     )
