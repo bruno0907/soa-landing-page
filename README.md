@@ -11,10 +11,6 @@
 
 <br/>
 
-<div align="center" marging="10px">
-  <img src="https://img.shields.io/github/license/bruno0907/soa-landing-page.svg" />
-</div>
-</br>
 <p>This project was made initially with ReactJs then later on exported to NextJS.</p>
 
 <p>The purpose of this project was to allow players of World of Warcraft at the Azralon-US server to apply for sposts on the raiding team of the guild. 
