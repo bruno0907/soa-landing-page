@@ -52,4 +52,4 @@ With this tool we was able to allow any player of the guild to advertise our spo
 
 ## 📑 License
 
-This project is under MIT license. See [LICENSE](LICENSE.md) for aditional details.
+This project is under MIT license. See [LICENSE](LICENSE) for aditional details.
