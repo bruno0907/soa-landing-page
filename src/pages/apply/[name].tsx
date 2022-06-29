@@ -1,10 +1,6 @@
 import { useState, useEffect } from 'react';
-import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import Head from 'next/head';
-
-import { parseCookies } from 'nookies';
 
 import useLoader from '../../hooks/useLoader';
 
@@ -24,8 +20,7 @@ import { Container,
   ButtonSection,
   ApproveButton,
   RejectButton,
-  ReOpenButton,
-  DeleteApplyButton,
+  ReOpenButton,  
 } from '../../styles/apply';
 
 import axios from 'axios';
@@ -168,9 +163,7 @@ const Apply = () => {
                 }   
                 </ButtonSection>
             </ApplyBody>
-
-          </ApplyContent>
-          <DeleteApplyButton isDisabled>Excluir Apply</DeleteApplyButton>          
+          </ApplyContent>          
         </Container>   
       </>
     )
@@ -179,19 +172,20 @@ const Apply = () => {
 
 export default Apply;
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const cookies = parseCookies(ctx);  
+// ### DISABLED FOR DEMONSTRATION PURPOSE ###
+// export const getServerSideProps: GetServerSideProps = async (ctx) => {
+//   const cookies = parseCookies(ctx);  
 
-  if(!cookies['@soa.user']) {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false
-      }
-    };
-  };      
+//   if(!cookies['@soa.user']) {
+//     return {
+//       redirect: {
+//         destination: '/',
+//         permanent: false
+//       }
+//     };
+//   };      
  
-  return {
-    props: {}
-  }
-}
+//   return {
+//     props: {}
+//   }
+// }

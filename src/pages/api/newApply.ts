@@ -67,11 +67,12 @@ export default async function handleApplies(req: VercelRequest, res: VercelRespo
 
     const apply = await Apply.create<ApplyProps>(data);
 
-    const { _id } = apply;
+    console.log(apply)
 
-    const discordNotifyNewApply = new DiscordNewApplyService();
-
-    await discordNotifyNewApply.execute({ _id, charName, className, mainSpec });
+    // ###### DISABLED BECAUSE DISCORD SERVER NO LONGER EXISTS #######
+    // const { _id } = apply;
+    // const discordNotifyNewApply = new DiscordNewApplyService();
+    // await discordNotifyNewApply.execute({ _id, charName, className, mainSpec });
 
     return res.status(201).json(apply);
 

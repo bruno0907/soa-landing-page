@@ -411,7 +411,7 @@ export const ReOpenButton = styled.button`
   background: var(--color-button-primary);
 `
 
-export const DeleteApplyButton = styled.span`
+export const DeleteApplyButton = styled.button`
   margin: 24px 0;
   color: var(--color-text-secondary);
   cursor: pointer;

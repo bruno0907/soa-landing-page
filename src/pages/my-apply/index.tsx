@@ -43,7 +43,7 @@ interface MyApplyProps {
 };
 
 export default function MyApply({ name }: MyApplyProps) {
-  const { Loader, isLoading, setIsLoading } = useLoader(true);
+  const { Loader, isLoading, setIsLoading } = useLoader(true);  
 
   const [apply, setApply] = useState<MyApplyProps>();
   

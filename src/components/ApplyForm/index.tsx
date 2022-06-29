@@ -44,7 +44,7 @@ const initialFormData = {
 };
 
 export default function ApplyForm(){   
-  const applyUrl = 'https://sons-of-aiur.vercel.app/my-apply';
+  const applyUrl = process.env.NEXT_PUBLIC_USER_APPLY_URL  
   
   const { Loader, isLoading, setIsLoading } = useLoader(true);
 
@@ -55,7 +55,7 @@ export default function ApplyForm(){
     handleFormPreviousStep, 
     handleFormNextStep, 
     formStep, 
-    setFormStep 
+    setFormStep, 
   } = useForm(initialFormData);
   
   const [classes, setClasses] = useState<ClassesProps[]>([]);
@@ -65,7 +65,7 @@ export default function ApplyForm(){
   useEffect(() => {
     axios.get('/api/classes')
     .then(({ data }) => setClasses(data))
-    .catch(() => setApplyFormStatus(applyFormState.maintenance))
+    .catch(() => setApplyFormStatus(applyFormState.pending))
     .finally(() => setIsLoading(false))
 
   }, [setIsLoading]);  
@@ -263,11 +263,7 @@ export default function ApplyForm(){
             <h3>Apply realizado com sucesso!</h3>
             <a href={applyUrl} target="_blank" rel="noopener noreferrer">
               Acompanhe por aqui o status do seu apply
-            </a>
-            <p>Se tiver dúvidas ou quiser trocar uma idéia direto conosco, entre em contato no nosso discord.</p>            
-            <a href="https://discord.gg/9Be497S" target="_blank" rel="noopener noreferrer">
-              <img src="/images/discord_logo.svg" alt="Discord" />
-            </a>
+            </a>            
           </FormFallback>
         }
 
@@ -276,11 +272,7 @@ export default function ApplyForm(){
             <GoX size={140} color="#822121" />
             <h3>Houve um erro ao enviar seu apply!</h3>
             <p>- Certifique-se de que você informou corretamente o nome do seu personagem.</p>
-            <p>- Lembre-se! Não é necessário informar o seu servidor. Caso seu personagem não esteja no Azralon, contate-nos diretamente</p>            
-            <p>- Caso o erro persista, acesse nosso discord e fale diretamente conosco.</p>
-            <a href="https://discord.gg/9Be497S" target="_blank" rel="noopener noreferrer">
-              <img src="/images/discord_logo.svg" alt="Discord" />         
-            </a>   
+            <p>- Lembre-se! Não é necessário informar o seu servidor. Caso seu personagem não esteja no Azralon, contate-nos diretamente</p>                        
             <Button label="Tentar novamente" onClick={handleFormReset} />
           </FormFallback>
         }  
@@ -288,11 +280,7 @@ export default function ApplyForm(){
         { applyFormStatus === 'MAINTENANCE' &&
           <FormFallback>
             <GoAlert size={140} color="#ffff00"/>
-            <h3>Serviço indisponível!</h3>   
-            <p>Acesse nosso discord e fale diretamente conosco.</p>
-            <a href="https://discord.gg/9Be497S" target="_blank" rel="noopener noreferrer">
-              <img src="/images/discord_logo.svg" alt="Discord" />         
-            </a>            
+            <h3>Serviço indisponível!</h3>               
           </FormFallback>
         }
 

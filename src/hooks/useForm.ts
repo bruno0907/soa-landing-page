@@ -1,8 +1,8 @@
 import { useState, ChangeEvent } from "react"
 
-export default function useForm(initialState: any){
+export default function useForm(initialState: any){  
   const [state, setState] = useState(initialState)
-  const [formStep, setFormStep] = useState(1)  
+  const [formStep, setFormStep] = useState(1)    
 
   const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target
@@ -13,14 +13,14 @@ export default function useForm(initialState: any){
     })
   }
 
-  const handleFormNextStep = () => {       
+  const handleFormNextStep = () => {      
     const nextStep = () =>  formStep < state.formSteps && setFormStep(formStep => formStep + 1)      
     setTimeout(nextStep, 500)    
   }
 
-  const handleFormPreviousStep = () => {        
+  const handleFormPreviousStep = () => {            
     const prevStep = () => formStep > 0 && setFormStep(formStep => formStep - 1)      
-    setTimeout(prevStep, 500) 
+    setTimeout(prevStep, 500)     
   }
 
   return {
@@ -30,6 +30,6 @@ export default function useForm(initialState: any){
     formStep,
     setFormStep,
     handleFormPreviousStep,
-    handleFormNextStep,    
+    handleFormNextStep,        
   }
 }
